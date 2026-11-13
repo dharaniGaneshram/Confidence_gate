@@ -1,0 +1,2189 @@
+Indi-RomCoM: Code-Mixed Benchmark for Evaluating LLMs
+on Romanized Indic-English Instructions
+Avisha Das1, Mihir Parmar2, Mohana Ramnath1, and Pulkit Verma3
+1Shiv Nadar University Chennai, 2Google Cloud AI Research, 3IIT Madras
+avishadas@snuchennai.edu.in, mihirparmar@google.com,
+mohana23110098@snuchennai.edu.in, pulkitv@cse.iitm.ac.in
+Abstract
+arXiv:2606.30790v1  [cs.CL]  29 Jun 2026
+Romanized Code Mixing (RCM), where
+bilingual speakers fluidly blend local lan
+guages with English in Roman script, has
+emerged as the dominant form of commu
+nication across multilingual communities.
+While Large Language Models (LLMs) per
+form strongly on monolingual and native
+script benchmarks, their ability to follow
+instructions and reason over RCM-based
+content remains largely unexplored. To
+this end, we introduce the Indi-RomCoM
+benchmark for facilitating systematic eval
+uation on Indic Romanized Code-Mixed
+instructions. Our benchmark spans seven
+instruction-following tasks, four widely
+spoken Indic languages, and three con
+trolled code-mixing intensity levels. We
+extensively evaluate a suite of LLMs cov
+ering proprietary, open-weight, and Indic
+focused models under zero- and few-shot
+settings. LLMs consistently underperform
+on RCMinstructions, with performance de
+grading as code-mixing density increases.
+Furthermore, reasoning tasks suffer less
+degradation than detection tasks (e.g., Tox
+icity) because the generated explanations
+offer necessary context. We believe Indi
+RomCoM helps the community in devel
+oping inclusive multilingual systems.
+1 Introduction
+Ensuring that Large Language Models
+(LLMs) can follow instructions in everyday re
+gional language styles is a critical requirement
+for global deployment (Gupta et al., 2024;
+Deuchar, 2020). India is a clear example of
+this challenge because it contains a highly di
+verse landscape of 22 official languages spoken
+by over 1.4 billion people. In this multilin
+gual environment, English has mixed with lo
+cal tongues to create a natural, rule-governed
+Figure 1: Example (LLaMa-7B-Instruct) showing
+failure to understand romanized “tanglish”.
+phenomenon called Romanized Code-Mixing
+(RCM) (Sengupta et al., 2024; Winata et al.,
+2023). Driven by character limits, typing
+by sound on smartphones, and conversational
+convenience, millions of bilingual users fluidly
+blend regional Indic words, English terms, and
+local grammar into a single sentence, using the
+Latin alphabet exclusively.
+For instance, a Hindi-English speaker asks,
+“Yeh loan ke liye mujhe kya karna padega?”,
+which translates to, “What do I have to
+do to get this loan?”. These sentences are
+highly structured everyday registers that dom
+inate South Asian digital text. Yet, while
+generative AI models perform well on stan
+dard, single-language test sets, their accu
+racy drops sharply when processing these
+mixed linguistic setups, as exemplified in Fig
+ure 1 (Tamil-English). Open-weight LLMs
+built specifically for the Indian subcontinent,
+such as Airavata (Gala et al., 2024), Tamil
+LLaMA (Balachandran, 2023), Sarvam-1 (Sar
+vam AI, 2024), improve performance on native
+scripts, but their capabilities fail when con
+fronted with Romanized text.
+A primary obstacle is that the NLP commu
+nity lacks the benchmarking systems needed
+to systematically diagnose these failure modes.
+Traditional code-mixed data collections like
+GLUECoS (Khanuja et al., 2020a) are lim
+1
+Work
+ited to low-level, word-by-word classification
+tasks such as labeling parts of speech, mak
+ing them unable to evaluate high-level reason
+ing. Conversely, newer generative benchmarks
+like CodeMixBench (Yang and Chai, 2025a)
+are limited only to native scripts. This effec
+tively blinds them to the spelling and phonetic
+shifts that characterize human-model interac
+tions. Refer to Table 1 for comparison across
+different state-of-the-art code-mixing bench
+marks.
+Script Languages Task Type Density
+GLUECoS
+LinCE
+CodeMixBench
+ChiEngMixBench
+Choudhary et al.
+IndicDB
+IndicLLMSuite
+UPDESH
+RomanSetu
+NS
+NS
+NS
+NS
+RS
+NS,RS
+NS
+NS
+RS
+Global
+Global
+Global
+ZH,EN
+HI,EN
+Indic
+Indic
+Indic
+Indic,EN
+Classification
+Classification
+Generative
+Dialogue
+Syntax
+Text to SQL
+Resource
+Instruction
+Translation
+Classification,
+Indi-RomCoM NS, RS Indic,
+EN
+To bridge this evaluative gap, we introduce
+Indi-RomCoM, a systematic benchmark de
+signed to stress-test large language models on
+Romanized Indic-English instructions. Cover
+ing four major regional languages across seven
+core task types, our framework utilizes a lin
+guistically controlled generation pipeline to di
+vide inputs into precise code-mixing intensity
+layers. Through this process, we construct
+a large-scale evaluation suite validated by na
+tive bilingual annotators to guarantee strong
+semantic preservation and contextual natural
+ness. Using Indi-RomCoM we evaluate 19
+prominent language models under zero-shot
+and few-shot setups. Our experiments show
+that climbing code-mixing intensity drives
+severe, monotonic performance degradation
+across both general-purpose and specialized In
+dic open-weight architectures alike. A com
+prehensive structural breakdown of the frame
+work is provided in Section 3.
+Generative,
+Instruction
+✓
+Table 1: A comparison against existing resources.
+Abbreviations mean NS for Native Script, RS for
+Romanized Native Script, and Clf. for Classifica
+tion. The Density column tracks if a benchmark
+evaluates performance across varying language
+mixing percentages. Our framework uniquely sup
+ports separate multi-density layers representing
+text sets with 25 percent and 50 percent and 75
+percent word switching intensity.
+thesize data from parallel corpora. Similarly,
+Sravani and Mamidi (2023) leveraged neu
+ral machine translation (NMT) architectures,
+employing filters like the Code-Mixing Index
+(CMI) and M-index to refine synthetic outputs.
+While these approaches advanced localized
+language modeling and individual datasets
+like GLUECoS (Khanuja et al., 2020b) or
+LinCE (Aguilar et al., 2020) , they heavily re
+lied on formal native scripts, targeted classifi
+cation pipelines, and lacked the framework to
+explore multi-task instruction following.
+In summary, we introduce Indi-RomCoM,
+a multi-task benchmark developed using novel
+controlled word-selection framework to
+evaluate LLMs on RCM. Additionally, we
+present a comprehensive empirical analysis
+of widely used LLMs and introduce the Reg
+ister Defection Rate (RDR) to quantify
+language switching failures during reasoning.
+2 Prior Work
+Benchmarks for code-mixed NLP Early
+computational modeling of code-mixed (CM)
+discourse focused primarily on token-level clas
+sification tasks or synthetic text generation.
+Frameworks like the GCM Toolkit (Rizvi et al.,
+2021) built early foundations by computation
+ally operationalizing structural linguistic con
+straints, such as the Equivalence Constraint
+and Matrix Language Frame theories, to syn
+As detailed in Table 1, recent generative
+evaluations such as CodeMixBench (Yang and
+Chai, 2025a) and ChiEngMixBench (Yang
+et al., 2026) highlight significant LLM degra
+dation on CM inputs, particularly in mathe
+matical reasoning and dialogue.
+Indic LLMs and Resources The develop
+ment of Indic-focused models and datasets has
+accelerated to address South Asia’s linguistic
+diversity. Large-scale resource efforts such as
+IndicLLMSuite (Khan et al., 2024a) and UP
+DESH (Chitale et al., 2025) provide extensive
+pretraining corpora across 13–22 languages,
+while specialized open-weight architectures in
+cluding Airavata (Gala et al., 2024), Tamil
+Llama (Balachandran, 2023), and Sarvam
+1 (Sarvam AI, 2024) maximize localized syn
+tactic representation.
+Despite this progress, critical gaps persists.
+First, these suites remain anchored to native
+scripts, leaving CM-ed validation absent from
+official evaluation loops. Transliterated or
+2
+Figure 2: Overview of the Indi-RomCoM creation framework. The pipeline processes English-only and
+Indic-native tasks through initial translation (Phase I), applies a taxonomy-guided generation engine to
+create controlled code-mixing at 25%, 50%, and 75% intensities (Phases II & III), and concludes with
+script romanization to produce the final multi-level benchmark (Phase IV).
+CM-ed prompts collected through crowdsourc
+ing (e.g., Airavata’s Anudesh1 pipeline) are
+rarely isolated for formal behavioral verifica
+tion or benchmarked against varying density
+thresholds. Recent evaluations reinforce this
+urgency: IndicDB (Dawar et al., 2026) ex
+posed sharp execution drops under Roman
+ized Hinglish instructions, and IndicSafe (Pat
+tnayak and Chowdhuri, 2026), despite audit
+ing models for South Asian safety, overlooks
+the morphological blending inherent to real
+world bilingual typing. The few localized stud
+ies that do address Romanization remain nar
+row in scope, e.g., Choudhary et al. (2026)
+restrict their analysis to verb-level inflections
+within Hindi-English pairs.
+Indi-RomCoM addresses these gaps, pro
+viding the first human-validated, multi-task,
+multi-tier benchmark for Romanized code
+mixed instruction-following, evaluating a com
+prehensive suite of LLMs (closed- and open
+weights along with Indic) against the natural
+linguistic drift in informal Indic writing.
+3 Indi-RomCoM Benchmark
+Figure 2 demonstrated all the phases of the
+Indi-RomCoMbenchmark.
+1https://github.com/AI4Bharat/Anudesh
+3.1 Task Design and Selection
+We evaluate LLM performance on Roman
+ized code-mixed instructions across seven
+tasks spanning three competency dimensions:
+logical reasoning, semantic understand
+ing, and content moderation. All tasks
+are drawn from well-validated public sources
+with balanced label distributions, ensuring
+that observed performance differences re
+flect genuine code-mixing sensitivity rather
+than data artefacts (Bai et al., 2024; Kwan
+et al., 2024). For logical reasoning, we in
+clude Word Analogy and Question Decompo
+sition from Super-NaturalInstructions (Wang
+et al., 2022) and Mathematical Reasoning
+from GSM8K (Cobbe et al., 2021). For se
+mantic understanding, we draw on Paraphrase
+Detection, Sentiment Analysis, and Natural
+Language Inference from the AI4Bharat In
+dicXtreme collection (Kunchukuttan et al.,
+2020; Aggarwal et al., 2022). Toxicity Detec
+tion is adapted from the IndicAlign-Toxic Ma
+trix (Chitale et al., 2025). Table 2 summarises
+the full task inventory; detailed descriptions
+and dataset statistics are in Appendix A.
+Languages We evaluate romanized Indic
+English code-mixed settings across four ma
+jor Indian languages: Hindi, Bengali, Gujarati,
+and Tamil, covering both Indo-Aryan and Dra
+vidian language families. These languages cap
+ture diverse linguistic structures, resource lev
+3
+els, and code-mixing patterns commonly ob
+served in bilingual Indic-English communica
+tion (Chitale et al., 2025; Jaavid et al., 2024).
+3.2 Code Mixing Framework
+We develop a four-step framework for gen
+erating controlled Indic-English RCM-ed
+instanced for the Indi-RomCoMbenchmark.
+Building
+upon the Equivalence Con
+straint (Poplack, 2001) and Matrix Language
+Frame (Myers-Scotton, 1993) theories of bilin
+gual switching, we systematically vary the
+mixing intensity while preserving semantic
+consistency. Full implementation details and
+prompting strategies, etc. are in Appendix B.
+English to Indic Translation. English
+only tasks (Word Analogy, Question De
+composition (Wang et al., 2022), and
+GSM8K (Cobbe et al., 2021)) are trans
+lated into indic versions following a two-step
+pipeline of machine translation and refinement.
+Other tasks are derived directly from their
+existing Indic datasets, IndicXNLI (Aggarwal
+et al., 2022), IndicAlign-Toxic (Chitale et al.,
+2025), IndicXParaphrase (Khan et al., 2024b),
+and IndicSentiment (Gala et al., 2024).
+Word-Selection Taxonomy. Each switch
+able word or phrase is assigned to one of five
+linguistically motivated categories (Poplack,
+2001; Winata et al., 2023), logged with its cat
+egory label, Indic replacement, and a linguistic
+rationale to ensure substitutions reflect nat
+ural bilingual behavior rather than arbitrary
+replacement. Table 9 in Appendix summa
+rizes the five categories, their switching poli
+cies, and illustrative cross-lingual examples.
+Code-Mixing Intensity Levels. Three in
+tensity levels (25%, 50%, 75%) are produced
+by progressively activating category subsets,
+with the Code-Mixing Index (CMI) (Srivas
+tava and Singh, 2021) quantifying the propor
+tion of replaced English tokens.
+Romanization of Indic Script. All Indic
+script outputs are converted to Latin script
+using Aksharantar (Madhani et al., 2023b)
+and Aksharamukha, with end-to-end roman
+izations sourced from IndicLLMSuite (Khan
+et al., 2024b) where available. Natural translit
+eration variability is intentionally preserved to
+reflect real-world romanized code-mixed usage
+by multilingual South Asian users.
+3.3 Benchmark Validation and
+Statistical Analysis
+Dataset Size We sample 100 instances from
+each of seven tasks using stratified sampling
+over labels and difficulty levels, yielding 700
+English base instances. Each instance is in
+stantiated across the four Indic languages and
+three code-mixing intensity levels, resulting in
+8,400 evaluation instances. Task-wise sam
+pling details are provided in Appendix B.6.
+Human Validation To assess the quality
+of Indi-RomCoM, we conduct a human eval
+uation study. We recruit four native bilin
+gual annotators (Tamil, Bengali, Hindi, Gu
+jarati) with experience using Romanized code
+mixed communication. Annotators indepen
+dently evaluate samples across all tasks and
+CM levels using a 3-point Likert scale (1 =
+Unnatural, 2 = Somewhat Natural, 3 = Natu
+ral), rating the code-mixed instances on two
+aspects: (i) Translation Fidelity, measuring
+whether romanized code-mixed text preserves
+the semantic meaning of the English source
+using corpus-level Character n-gram F-score
+(ChrF; Chitale et al. 2025), averaged across
+all seven tasks for each language. And, (ii)
+Code-mixing Naturalness, assessing whether
+the code-mixed instances resembles bilingual
+usage rather than mechanical substitution.
+Two annotators per language rate the same
+instances independently; we report Cohen’s
+κ (Cohen, 2013) for pairwise naturalness agree
+ment. Table 3 summarizes per-language re
+sults. An average ChrF of 67.00 confirms sub
+stantial semantic overlap consistent with 50%
+CM intensity. Bengali and Tamil score high
+est on ChrF, reflecting denser preserved En
+glish structure, while Hindi and Gujarati score
+lower due to heavier Indic vocabulary switch
+ing. Overall agreement is moderate (average
+κ =0.615) for code-mixing naturalness, consis
+tent with the inherent subjectivity of natural
+ness assessment for code-mixed text (Chitale
+et al., 2025). Agreement is highest for Gujarati
+(0.905) and lower for Bengali and Tamil due
+to stylistic variation in generation-heavy tasks.
+Higher code-mixing intensities generally pro
+duce lower agreement, especially for Question
+4
+Type Task Source Type
+GEN
+WordAnalogy SuperNIT1152-1159(Wangetal.,2022) Detection+Explanation
+QuestionDecomp. SuperNIT168/176/184(Wangetal.,2022) Explanation
+MathReasoning GSM8K(Cobbeetal.,2021) Numerics+Explanation
+CLF
+Paraphrase IndicXParaphrase(Kunchukuttanetal.,2020) Detection
+Sentiment IndicSentiment(Kunchukuttanetal.,2020) Detection
+Inference IndicXNLI(Aggarwaletal.,2022) Detection
+Toxicity IndicAlign-Toxic(Chitaleetal.,2025) Detection+Refusal
+Table2: Indi-RomCoMtaskinventory. All instancesaredrawnfromvalidatedsourceswithstratified
+labeldistributions.Tasktype:GEN=GenerationandCLF=Classification.
+Language ChrF Cohen’sκ
+(Fidelity↑) (Naturalness↑)
+Tamil 71.99 0.52
+Bengali 74.08 0.48
+Hindi 62.00 0.56
+Gujarati 59.95 0.91
+Average 67.00 0.615
+Table3: ChrFscoresare reportedbetween50%
+CMromanizedoutput-ENsource.
+Decomposition, where dense predicate-level
+switchingcreates less commonbilingual con
+structions. Per-task, per-language, per-CM
+level results breakdownare provided inAp
+pendixB.6.
+Indi-RomCoMContent Analysis We
+analyzeIndi-RomCoMtoverifyif thethree
+code-mixing intensity levelsaredistinct, cat
+egoryactivations followthe intended linguis
+ticprogression,andtask-levelvariationissys
+tematicandnotartifactual. Thecode-mixing
+quality for each intensity level is studiedus
+ing code-mixing index (CMI) metric. Ta
+ble 4 reports themeanCMI (µ±σ) per
+taskandCMlevel acrossall 8,400 instances.
+MeanCMI risesmonotonically: µ=0.249
+(25%-CM)to0.294(50%-CM)to0.360(75%
+CM). All pairwise differences are statisti
+cally significant (Wilcoxon signed-rank, p<
+10−100,Bonferroni-corrected),confirmingthat
+the three conditions represent genuinelydis
+tinct code-mixing regimes. Wealsoperform
+the category-based frequency analysis on the
+dataset’s rationale annotations. Figures 3a
+b showthe proportional substitutionbreak
+downat 50%-CMand75%-CMrespectively,
+wheremulti-categoryactivationproduces in
+Task 25% 50% 75%
+WordAnalogy 0.423±0.252 0.470±0.218 0.503±0.190
+GSM8K 0.084±0.147 0.099±0.144 0.152±0.175
+QuestionDecomp. 0.179±0.147 0.211±0.132 0.365±0.123
+Paraphrase 0.080±0.220 0.186±0.254 0.195±0.263
+Sentiment 0.028±0.100 0.078±0.115 0.094±0.149
+NLI 0.004±0.016 0.114±0.142 0.138±0.157
+Toxicity 0.851±0.171 0.805±0.193 0.981±0.049
+Alltasks 0.249±0.338 0.294±0.311 0.360±0.345
+Table4:MeanCMI (±SD)pertaskandCMin
+tensity level, averagedacross four languagesand
+all instancespertask.
+terpretabletask-levelvariation.Additionalde
+tailsarereportedinAppendixB.7.
+4 ExperimentalSetup
+4.1 Models
+Weevaluatemodelsacrossproprietarysystems
+(OpenAI’s GPT 3.5-turbo (OpenAI, 2026),
+Google’sGemini3.5Flash(Kavukcuogluetal.,
+2026),andAnthropic’sClaude4.6Opus(An
+thropic, 2026)), general open-weight archi
+tectures (Meta’s LLaMa3 series (Grattafiori
+et al., 2024),AlibabaCloud’sQwen(2.5-3.5
+series)(Yangetal.,2025),Google’sGemma4
+series(Teametal.,2024),andMistralAI’sMis
+tral series (MistralAI, 2026)), Indic-focused
+multilingualandregionalmodels,andspecial
+izedfine-tuned ablation variants to analyze
+performance across scale and training types.
+Forourablationstudy,wefine-tuneLLaMA
+3.2-3B,LLaMA-3.1-8B, andGemma-2-7Bon
+our training split using Low-RankAdapta
+tion to assess the necessityof explicit code
+mixedsupervision.Acompletemodellist,fine
+tuningconfigurations,comprehensivehyperpa
+rameterdetails,anddatasetstratificationmet
+ricsareprovidedinAppendixC.1.
+5
+CAT-C Domain/Task Terminology
+CAT-B Logical Connectives
+CAT-A Functional/Structural Words
+CAT-D Content Domain Nouns
+CAT-E Fulll Predicate Phrases
+50%-CM (All categories active)
+100%
+80%
+60%
+Proportion of Substitutions
+40%
+20%
+0%
+100%
+80%
+60%
+40%
+20%
+0%
+75%-CM (All categories active)
+Figure 3: Word-category substitution frequency at
+50%-CM (top) and 75%-CM (bottom). At 25%
+CM all substitutions are CAT-C (100%) by con
+struction and are not shown. Colours: CAT-C
+(blue), CAT-B (orange), CAT-D (green), CAT-A
+(red), CAT-E (purple). Labels for segments >7%.
+4.2 Prompting Protocol
+We evaluate all models under zero-shot and
+stratified 3-shot settings using structured four
+part prompt templates that enforce explicit
+register maintenance rules.
+The underly
+ing evaluations span seven core instruction
+following tasks where input values are dy
+namically mapped to specific romanized code
+mixed intensity configurations.
+Complete
+structural prompt definitions, few-shot con
+ditioning frameworks, and individual task
+specific instruction boxes are also provided in
+Appendix C.2.
+4.3 Evaluation Metrics
+We use four metrics to evaluate model perfor
+mance across our benchmark. (i) Task Accu
+racy (ACC) measures exact string matches
+for classification alongside standard extraction
+rubrics for generation tasks; (ii) Register De
+fection Rate (RDR) tracks the proportion
+of model outputs that incorrectly revert to
+standard English text; (iii) Vocabulary Cov
+erage Rate (VCR) measures the percentage
+of unique romanized tokens that exist as com
+plete entries in a model tokenizer vocabulary;
+and (iv) Performance Gap (PG) calculates
+the absolute accuracy loss between the En
+glish baseline and each code-mixed intensity
+level. We validate these trends using Wilcoxon
+signed-rank tests, Bonferroni corrections, and
+Spearman correlation checks. Detailed defini
+tions, parsing criteria, and statistical configu
+rations are provided in Appendix C.3.
+5 Results and Analysis
+5.1 Main results
+We present the evaluation results on the Indi
+RomCoM benchmark. Table 6 reports aver
+age task accuracy across all seven tasks for
+the 19 models in comparison with the En
+glish baseline (BL) and three code-mixing in
+tensity levels. Figure 4 illustrates per-task per
+formance variations across a selected set of
+best performing models and code-mixing set
+tings. Additionally, Table 7 reports the Reg
+ister Defection Rate (RDR) across all models
+and CM conditions, measuring the proportion
+of responses that revert primarily to English
+despite receiving code-mixed instructions.
+Word
+Analogy
+GSM8K
+Question
+Decompos.
+Paraphrase
+Poor performance of models on In
+dic RCM-ed data as compared to En
+glish Table 6 reveals a consistent pattern of
+accuracy degradation under Romanized code
+mixed (RCM) conditions across nearly all
+models. Every model except the Qwen3 vari
+ants records a positive performance gap, prov
+ing Indic RCM input is substantially harder
+than English for current LLMs. Even the
+strongest models are affected: Claude Opus
+4.6 drops from 68.7% at baseline to 61.2% at
+75%-CM (PG-75 = +7.5), and Sarvam-30B,
+despite dedicated Indic pretraining (falls from
+64.2% to 56.1% (PG-75 = +8.1)). Smaller
+models suffer steeper drops; Mistral-3B loses
+17.5 percentage points by 75%-CM. These re
+sults demonstrate that no model family is ro
+bust to Indic RCM input, exposing a critical
+gap in multilingual LLM evaluation.
+Sentiment
+NLI
+Model performance varies by task
+type Figure 4 reveals task-level variation in
+model robustness under RCM input. GSM8K
+yields the highest accuracy overall (up to
+∼80% for LLaMA-3.1-70B), consistent with
+CAT-0 protection of mathematical tokens in
+sulating problem content from CM disruption.
+Sentiment analysis achieves the most consis
+tent cross-model performance, suggesting that
+naturally code-mixed product-review vocabu
+lary aids rather than hinders comprehension.
+Conversely, Word Analogy and Toxicity detec
+tion show the lowest absolute accuracy across
+6
+Toxicity
+Task Template Format and Prompt Frame
+Running Example (50%-CM)
+Sentiment
+Analysis
+Task Classify the sentiment of the following product review as
+positive (1), neutral (0), or negative (−1).
+[Few-shot block omitted in zero-shot condition]
+Review ⟨D1⟩ Sentiment ⟨L1⟩ 
+. . .
+[Query] Review ⟨in⟩ Sentiment
+Register Please respond in the same language and script as the
+input.
+Tamil
+Review Foldable type of microphone
+with mic marrum micro sd card slot.
+Sentiment 1
+Inference
+(NLI)
+Task Given a premise and a hypothesis, determine whether the
+hypothesis is entailed (1), neutral (0), or contradicted (2) by the
+premise.
+[Few-shot block omitted in zero-shot condition]
+Premise ⟨D1p⟩ Hypothesis ⟨D1h⟩ Label ⟨L1⟩ 
+. . .
+[Query] Premise ⟨p⟩ Hypothesis ⟨h⟩ Label
+Register Please respond in the same language and script as the
+input.
+Hindi
+Premise Waise, yeh the three U2 pilots
+jo President Kennedy ke saath Washing
+ton mein General May ke daftar mein the.
+Hypothesis General May aur pilots ne
+daftar mein achha waqt bitaya.
+Label 1
+Paraphrase
+Task Determine whether the two sentences are paraphrases of
+each other. Output 1 if they are paraphrases and 0 otherwise.
+[Few-shot block omitted in zero-shot condition]
+S1 ⟨D1s1⟩ S2 ⟨D1s2⟩ Label ⟨L1⟩ 
+. . .
+[Query] S1 ⟨s1⟩ S2 ⟨s2⟩ Label
+Register Please respond in the same language and script as the
+input.
+Bengali
+S1Police station-e giye ami complaint ko
+rlam je amar phone churi hoyeche.
+S2 Ami police station-e giye janalam je
+amar phone ta churi giyeche.
+Label 1
+Task Classify whether the following text is toxic or non-toxic.
+Then briefly explain your classification in the same register as the
+input.
+Toxicity
+[Few-shot block omitted in zero-shot condition]
+Text ⟨D1⟩ Label ⟨L1⟩ Expl. ⟨E1⟩ 
+. . .
+[Query] Text ⟨in⟩ Label Expl.
+Register Please respond in the same language and script as the
+input.
+Hindi
+Text Tu bilkul bekaar hai, koi tumhari
+baat nahi sunta kyunki tum ek loser ho.
+Label toxic
+Expl. Is tarah ki baat karna galat hai
+kyunki yeh doosre insaan ki izzat ko de
+liberately hurt karta hai.
+Mathematics
+Task Solve the following word problem step by step. Show all in
+termediate calculations using the format <<expr=result>>, then
+output the final numeric answer after ####.
+[Few-shot block omitted in zero-shot condition]
+Problem ⟨D1⟩ Solution ⟨E1⟩ Answer ⟨A1⟩ 
+. . .
+[Query] Problem ⟨in⟩ Solution
+Register Please respond in the same language and script as the
+input.
+Hindi
+Problem At the bake sale, Tamara
+makes $32 from brownies. She made 2
+pans cut into 8 pieces each. How much
+did each brownie cost?
+Solution
+Tamara
+2×8=<<16>>16 tukde the.
+ke
+ki qeemat $32/16=$<<2>>2 thi.
+Answer 2
+paas
+Har ek
+Question
+Decomposition
+Task Given a question, its answer, and supporting facts, decom
+pose it into sub-questions each isolating one verifiable fact. For
+mat as Step1 ..., Step2 ..., with the Wikipedia source page for
+each step.
+[Few-shot block omitted in zero-shot condition]
+⟨D1⟩ 
+. . .
+[Query] ⟨in⟩ Decomposition
+Register Please respond in the same language and script as the
+input.
+Tamil
+Step1 Is Mr. Peanut alive? Step2 Do
+you have to be alive to compose some
+thing? Step3 Are answers to #1 and #2
+the same?
+Expl. This is a strategic vivaribhbhu
+into 3 ubha-ghelvi(ghal). Each bhadhi
+isolates a jharibharghghaghghudhiya un
+mai to bhadhil the yes/no ghelvi.
+Task Complete the analogy. Given A B. C ?, find D such that
+CD holds the same relationship as A B. Output the answer word,
+then explain the relationship type.
+Word
+Analogy
+[Few-shot block omitted in zero-shot condition]
+⟨D1⟩ 
+. . .
+[Query] ⟨in⟩ Answer
+Register Please respond in the same language and script as the
+input.
+Gujarati
+Input throw fly. aspire ?
+Answer attain
+Expl. Fly ej throw no parinam che. Aa￿￿,
+aa uvamai pramane, attain ej aspire no
+parinam che.
+Table 5: Structural breakdown of our instruction-following dataset tasks. Orange and blue labels
+denote task definition and query components respectively. Teal tags indicate the example language:
+Tamil (Sentiment, Decomposition), Hindi (NLI, Toxicity, Mathematics), Bengali (Paraphrase), Gujarati
+(Word Analogy), all at 50%-CM. Placeholders: ⟨Dk⟩ = k-th demo input, ⟨Lk⟩ = label, ⟨Ek⟩ = explanation,
+⟨Ak⟩ = answer, ⟨in⟩ = query input.
+7
+Family Model BL 25%-CM 50%-CM 75%-CM PG-25 PG-50 PG-75
+Closed
+GPT-3.5-Turbo 52.3±28.4 46.1±25.2 44.8±24.7 44.3±24.5 +6.2 +7.5 +8.0
+ClaudeOpus4.6 68.7±22.1 63.4±21.8 61.9±21.5 61.2±21.3 +5.3 +6.8 +7.5
+Gemini3.5Flash 61.4±25.9 56.2±24.3 54.8±23.9 54.1±23.7 +5.2 +6.6 +7.3
+LLaMA
+LLaMA-3.2-1B 24.3±16.9 11.5±4.5 11.6±5.4 11.6±5.3 +12.8 +12.7 +12.8
+LLaMA-3.1-8B 50.1±33.6 48.6±36.0 47.8±35.3 47.9±35.4 +1.5 +2.4 +2.2
+LLaMA-3.1-70B 54.6±32.3 51.5±28.8 50.6±28.3 50.5±28.4 +3.0 +4.0 +4.0
+Mistral Mistral-3B 37.2±12.7 24.8±11.1 22.1±18.3 19.7±11.9 +12.4 +15.1 +17.5
+Mistral-7B 49.7±35.7 44.3±35.0 43.6±34.5 43.3±34.3 +5.4 +6.1 +6.4
+Qwen
+Qwen2.5-1.5B 43.4±27.0 40.4±28.0 40.5±28.0 40.4±28.0 +3.1 +2.9 +3.0
+Qwen2.5-7B 49.7±35.7 44.3±35.0 43.6±34.5 43.3±34.3 +5.4 +6.1 +6.4
+Qwen3-4B 32.3±15.2 34.4±23.4 33.3±21.5 32.9±21.3 −2.1 −1.0 −0.6
+Qwen3-14B 29.5±24.8 34.7±33.4 34.0±32.4 33.8±32.2 −5.2 −4.5 −4.3
+Qwen3.5-2B 58.0±40.2 51.1±35.1 51.6±36.1 51.4±36.2 +7.0 +6.4 +6.6
+Qwen3.5-9B 49.7±35.7 44.3±35.0 43.6±34.5 43.3±34.3 +5.4 +6.1 +6.4
+Gemma Gemma-E2B 43.0±30.9 42.0±24.2 40.9±23.3 40.7±23.2 +1.1 +2.1 +2.3
+Gemma-E4B 48.0±37.8 46.1±36.7 44.6±34.9 44.5±34.7 +2.0 +3.4 +3.6
+Indic
+Airavata-7B 38.6±36.1 36.4±32.9 33.6±30.5 32.9±30.4 +2.1 +5.0 +5.7
+TamilLLaMA-7B 26.9±36.8 28.6±35.6 27.4±35.8 27.4±35.9 −1.7 −0.6 −0.6
+Sarvam-30B 64.2±24.5 59.8±23.1 57.3±22.8 56.1±22.4 +4.4 +6.9 +8.1
+Table6:Averagetaskaccuracy(%)across7tasksinzero-shotsetting,averagedover4languages(±SD
+across tasks). BL=Englishbaseline. PG=PerformanceGap(BL−CMlevel; positive=accuracy
+drop).CM=CodeMixing.Bold=bestBLperfamily.
+Average Accuracy %
+(CM levels averaged)
+100
+80
+60
+40
+20
+  0
+Word Analogy GSM 8K Question
+Decomposition
+Paraphrase Sentiment NLI Toxicity
+Figure4:Averagetaskaccuracy(%)undercode-mixed(CM)instructionsbymodelandtask.
+Eachbar reportsaccuracyaveragedacross threeCMintensity levels (25%, 50%, 75%)andfour Indic
+languages inthezero-shotsetting.Errorbarsdenotestandarddeviation.Dashedvertical linesseparate
+theseventaskgroups.
+allmodels, the formerdue tomorphological
+sensitivity,thelatterexposingacriticalsafety
+gap: models trainedonEnglish safetydata
+struggletodetectharmexpressedinCMreg
+ister,withmostmodelsscoringbelow50%,a
+directlyconsequentialfailureforreal-worldde
+ployment.
+IndicPretrainingDrivesRegisterAd
+herenceTable7showsthatmostopen-source
+modelsdefectoverwhelminglyintoEnglishun
+der RCM input: LLaMA-3.1-8B, Qwen2.5
+1.5B,andQwen3-4Ballexceed98%AvgRDR,
+regardless of scale. The onlymodels that
+genuinely maintain CM register are Indic
+trained: Airavata-7B(16.5%),TamilLLaMA
+7B(19.9%), andSarvam-30B(26.1%). No
+tably, RDR rises withCMintensity across
+nearlyallmodels,confirmingthathighermix
+ingpressureamplifiesregisterdefectionrather
+thansuppressingit.
+5.2 AblationStudies
+Few-ShotPromptinghelpclosetheper
+formance gapThree-shot CMdemonstra
+tions yielda consistent 7–8%accuracygain
+over zero-shot across allmodel families (Ap
+8
+Family Model RDR@25%-CM RDR@50%-CM RDR@75%-CM AvgRDR
+Closed
+GPT-3.5-Turbo 48.3 53.7 61.2 54.4
+ClaudeOpus4.6 31.4 35.8 40.6 35.9
+Gemini3.5Flash 39.2 44.1 50.3 44.5
+LLaMA
+LLaMA-3.2-1B 51.0 49.6 49.4 50.0
+LLaMA-3.1-8B 99.8 99.7 99.7 99.7
+LLaMA-3.1-70B 97.6 97.5 97.5 97.5
+Mistral Mistral-3B 77.8 89.3 91.7 86.3
+Mistral-7B 60.6 64.7 65.1 63.5
+Qwen
+Qwen2.5-1.5B 99.8 99.8 99.8 99.8
+Qwen2.5-7B 60.6 64.7 65.1 63.5
+Qwen3-4B 99.9 98.7 97.8 98.8
+Qwen3-14B 89.7 91.3 95.1 92.0
+Qwen3.5-2B 99.6 99.6 99.6 99.6
+Qwen3.5-9B 60.6 64.7 65.1 63.5
+Gemma Gemma-E2B 78.3 82.7 93.5 84.8
+Gemma-E4B 74.8 81.3 84.3 80.1
+Indic
+Airavata-7B 10.4 18.4 20.7 16.5
+TamilLLaMA-7B 16.6 21.7 21.3 19.9
+Sarvam-30B 22.4 26.8 29.1 26.1
+Table7: RegisterDefectionRate(RDR,%)whenthequery is inCMregister. LowerRDRindicates
+strongerregisteradherence.AvgRDRisthemeanacrossthethreeCMintensitylevels.
+pendixTable13),drivenprimarilybyasharp
+reduction in register defection on classifica
+tiontasks, providing in-registerexamplesan
+chors the output format. However, perfor
+mancegaps (PG) remain largelyunchanged,
+confirming that CMexamples helpmodels
+adopt thecorrect registerwithout improving
+theirunderlyingcomprehensionofcode-mixed
+content, andgains onGSM8Kareminimal,
+replicatingpriorfindingsonmathematicalrea
+soning(YangandChai, 2025b). The results
+areshowninAppendixSectionD.
+Model performancevariesacross lan
+guagesFigure5showsthatHindi (Hinglish)
+achieves the highest average CMaccuracy
+acrossallthreemodelfamilies,consistentwith
+its greater representation in LLMpretrain
+ing corpora (Choudhary et al., 2026). Ben
+gali (Banglish) performs moderately, while
+Tamil(Tanglish)exhibitssharperdegradation
+ongenerationtasks,attributabletoitsDravid
+ianSOVsyntaxproducingmorecomplexCM
+structures.Gujarati(Gujlish)isthemostchal
+lenginglanguageoverall,reflectingitsminimal
+CommonCrawl representation andnear-zero
+coverageinexistingIndic-focusedpretraining.
+Finetuning ablationTo assess whether
+targeted supervision can bridge the code
+mixinggap,wefine-tunedLLaMA-3.2-3Band
+LLaMA-3.1-8BviaQLoRA(rank=16,α=32,
+4-bitNF4quantisation)on50%-CMRoman
+ised instructionpairs spanning all four lan
+guages and seven tasks. Bothmodels con
+vergetonear-identicalaggregateexact-match
+rates(86.3%vs.86.4%),confirmingthatscale
+yields diminishing returns once theCMfor
+mat is supervised directly, while the near
+total register-defection rate (99.9%) reflects
+theRoman-scriptnatureoftheoutputsrather
+thangeneration failure. Detailedresultsare
+presentedinAppendixTable14.
+Conclusion
+WepresentedIndi-RomCoM,abenchmarkto
+stress-test large languagemodels onRoman
+izedIndic-Englishinstructionsacrossmultiple
+languages, tasks,andintensitylevels.Ourex
+tensive evaluationof 17prominent language
+modelsrevealsthatclimbingcode-mixingden
+sity drives severe, monotonic performance
+degradationacrossbothgeneral-purposeand
+specialized architectures. Ablation variants
+show that this systematic challenge cannot
+be resolved bymodel scale or native-script
+pretrainingalone,provingthattargetedcode
+mixed supervision is necessary. This frame
+9
+Hindi (Hinglish)
+Highest LLM Coverage
+Word Analogy
+Toxicity
+NLI
+GSM 8K
+Question
+Decomp.
+Bengali (Benglish)
+Moderate LLM Coverage
+Word Analogy
+Toxicity
+NLI
+GSM 8K
+Tamil (Tanglish)
+Dravidian - SOV Syntax
+Word Analogy
+Toxicity
+Gujarati (Gujlish)
+Lowest LLM Coverage
+Word Analogy
+GSM 8K
+Question
+Decomp.
+Sentiment
+Paraphrase
+Sentiment
+Paraphrase
+NLI
+Question
+Decomp.
+Sentiment
+Paraphrase
+Toxicity
+NLI
+Sentiment
+GSM 8K
+Question
+Decomp.
+Paraphrase
+Avg. CM accuracy (%) across 7 tasks • averaged over 25%-, 50%-, 75%-CM conditions
+Figure 5: Per-language CM accuracy across 7 tasks and 3 LLM families. Each spider plot shows
+average accuracy (%) across 25%-, 50%-, and 75%-CM conditions for Proprietary (blue), Open-weight
+(green), and Indic-focused (red) model families. Performance decreases from Hindi to Gujarati, reflecting
+differences in LLM pretraining corpus coverage across languages.
+work establishes a rigorous foundation for fu
+ture research into register-robust multilingual
+models that reflect naturalistic bilingual com
+munication.
+Limitations
+Indi-RomCoM has several limitations worth
+acknowledging.
+The controlled generation
+pipeline may underrepresent organic real
+world code-mixing phenomena such as pho
+netic drift and intra-word mixing. Human vali
+dation relied on only four annotators, which is
+too small a pool to capture sociodemographic
+variation in code-mixing norms. Coverage is
+restricted to four Indic languages, leaving out
+major Indic language communities such as Tel
+ugu, Kannada, and Marathi. Additionally, the
+benchmark inherits labeling noise from the up
+stream crowdsourced datasets it draws from,
+and several instruction-following categories in
+cluding summarization and open-ended ques
+tion answering are absent from the current
+task suite.
+Ethical Considerations
+All tasks are derived from publicly available
+datasets, and no user data was collected from
+private communications or social media. The
+Toxicity Detection task contains genuinely
+harmful content by design because evaluat
+ing model refusal behavior under code-mixed
+framing is an important safety challenge. How
+ever, the benchmark should not be used to
+generate or amplify harmful content. Anno
+tators rating toxic instances were informed in
+advance and could skip individual samples at
+any time. We also caution against benchmark
+overfitting, where models are tuned to specific
+intensity levels without genuinely improving
+on naturalistic code-mixed understanding.
+References
+Divyanshu Aggarwal, Vivek Gupta, and Anoop
+Kunchukuttan. 2022. Indicxnli: Evaluating mul
+tilingual inference for indian languages. In Pro
+ceedings of the 2022 conference on empirical
+methods in natural language processing.
+Gustavo Aguilar, Sudipta Kar, and Thamar
+Solorio. 2020. LinCE: A centralized benchmark
+for linguistic code-switching evaluation. In Pro
+ceedings of the Twelfth Language Resources and
+Evaluation Conference.
+Anthropic. 2026. Introducing Claude Opus 4.6.
+Anthropic News. Accessed: May 24, 2026.
+Yushi Bai, Xin Lv, Jiajie Zhang, Hongchang Lyu,
+Jiankai Tang, Zhidian Huang, Zhengxiao Du,
+Xiao Liu, Aohan Zeng, Lei Hou, Yuxiao Dong,
+Jie Tang, and Juanzi Li. 2024. LongBench: A
+bilingual, multitask benchmark for long context
+understanding. In Proceedings of the 62nd An
+nual Meeting of the Association for Computa
+tional Linguistics (Volume 1: Long Papers).
+Abhinand Balachandran. 2023. Tamil-Llama: A
+new Tamil language model based on Llama 2.
+arXiv preprint arXiv:2311.05845.
+Eyamba G Bokamba. 1989. Are there syntactic
+constraints on code-mixing? World Englishes,
+8(3):277–292.
+10
+Pranjal A Chitale, Varun Gumma, Sanchit Ahuja,
+Prashant Kodali, Manan Uppadhyay, Deepthi
+Sudharsan, and Sunayana Sitaram. 2025. UP
+DESH: synthesizing grounded instruction tun
+ing data for 13 indic languages. arXiv preprint
+arXiv:2509.21294.
+Mukund Choudhary, Madhur Jindal, Gaurja
+Aeron, and Monojit Choudhury. 2026. Do LLMs
+model human linguistic variation? a case study
+in Hindi-English verb code-mixing. In Findings
+of the Association for Computational Linguis
+tics: EACL 2026.
+Karl Cobbe, Vineet Kosaraju, Mohammad Bavar
+ian, Mark Chen, Heewoo Jun, Lukasz Kaiser,
+Matthias Plappert, Jerry Tworek, Jacob Hilton,
+Reiichiro Nakano, Christopher Hesse, and
+John Schulman. 2021. Training verifiers to
+solve math word problems. arXiv preprint
+arXiv:2110.14168.
+Jacob Cohen. 2013. Statistical power analysis for
+the behavioral sciences. routledge.
+Alexis Conneau, Ruty Rinott, Guillaume Lample,
+Adina Williams, Samuel R. Bowman, Holger
+Schwenk, and Veselin Stoyanov. 2018. Xnli:
+Evaluating cross-lingual sentence representa
+tions. In Proceedings of the 2018 Conference
+on Empirical Methods in Natural Language Pro
+cessing.
+Aviral
+Dawar,
+Roshan Karanth, Vikram
+Goyal, and Dhruv Kumar. 2026. IndicDB
+benchmarking multilingual text-to-SQL capa
+bilities in indian languages. arXiv preprint
+arXiv:2604.13686.
+Margaret Deuchar. 2020. Code-switching in lin
+guistics: A position paper. Languages, 5(2):22.
+Jay Gala, Thanmay Jayakumar, Jaavid Aktar
+Husain, Mohammed Safi Ur Rahman Khan,
+Diptesh Kanojia, Ratish Puduppully, Mitesh M
+Khapra, Raj Dabre, Rudra Murthy, Anoop
+Kunchukuttan, and 1 others. 2024. Airavata: In
+troducing hindi instruction-tuned LLM. arXiv
+preprint arXiv:2401.15006.
+Aaron Grattafiori, Abhimanyu Dubey, Abhinav
+Jauhri, Abhinav Pandey, Abhishek Kadian, Ah
+mad Al-Dahle, Aiesha Letman, Akhil Mathur,
+Alan Schelten, Alex Vaughan, and 1 others.
+2024. The llama 3 herd of models. arXiv
+preprint arXiv:2407.21783.
+Ayushman Gupta, Akhil Bhogal, and Kripa
+bandhu Ghosh. 2024. Code-mixer ya nahi:
+Novel approaches to measuring multilingual
+llms’ code-mixing capabilities. arXiv preprint
+arXiv:2410.11079.
+Edward J Hu, Yelong Shen, Phillip Wallis, Zeyuan
+Allen-Zhu, Yuanzhi Li, Shean Wang, Liang
+Wang, Weizhu Chen, and 1 others. 2022. LoRA:
+Low-rank adaptation of large language models.
+Iclr, 1(2):3.
+J Jaavid, Raj Dabre, M Aswanth, Jay Gala, Than
+may Jayakumar, Ratish Puduppully, and Anoop
+Kunchukuttan. 2024. Romansetu: Efficiently
+unlocking multilingual capabilities of large lan
+guage models via romanization. In Proceedings
+of the 62nd Annual Meeting of the Association
+for Computational Linguistics (Volume 1: Long
+Papers).
+Koray Kavukcuoglu, Jeff Dean, Oriol Vinyals, and
+Noam Shazeer. 2026. Gemini 3.5: Frontier in
+telligence with action. Google Blog (The Key
+word). Accessed: May 24, 2026.
+Mohammed Safi Ur Rahman Khan, Priyam
+Mehta, Ananth Sankar, Umashankar Kumarave
+lan, Sumanth Doddapaneni, Suriyaprasaad B,
+Varun G, Sparsh Jain, Anoop Kunchukuttan,
+Pratyush Kumar, Raj Dabre, and Mitesh M.
+Khapra. 2024a. IndicLLMSuite: A blueprint for
+creating pre-training and fine-tuning datasets
+for Indian languages. In Proceedings of the 62nd
+Annual Meeting of the Association for Compu
+tational Linguistics (Volume 1: Long Papers).
+Mohammed Safi Ur Rahman Khan, Priyam
+Mehta, Ananth Sankar, Umashankar Kumarave
+lan, Sumanth Doddapaneni, Sparsh Jain, Anoop
+Kunchukuttan, Pratyush Kumar, Raj Dabre,
+Mitesh M Khapra, and 1 others. 2024b. Indi
+cllmsuite: A blueprint for creating pre-training
+and fine-tuning datasets for indian languages. In
+Proceedings of the 62nd Annual Meeting of the
+Association for Computational Linguistics (Vol
+ume 1: Long Papers).
+Simran Khanuja, Sandipan Dandapat, Anirudh
+Srinivasan, Sunayana Sitaram, and Monojit
+Choudhury. 2020a. Gluecos: An evaluation
+benchmark for code-switched nlp. In Proceed
+ings of the 58th Annual Meeting of the Associa
+tion for Computational Linguistics.
+Simran Khanuja, Sandipan Dandapat, Anirudh
+Srinivasan, Sunayana Sitaram, and Monojit
+Choudhury. 2020b. GLUECoS: An evaluation
+benchmark for code-switched NLP. In Proceed
+ings of the 58th Annual Meeting of the Associa
+tion for Computational Linguistics.
+Anoop Kunchukuttan, Divyanshu Kakwani, Satish
+Golla, Avik Bhattacharyya, Mitesh M Khapra,
+Pratyush Kumar, and 1 others. 2020. Ai4bharat
+super corpus: Monolingual corpora and word
+embeddings for indic languages. arXiv preprint
+arXiv:2005.00085.
+Wai-Chung Kwan, Xingshan Zeng, Yufei Wang,
+Yusen Sun, Liangyou Li, Yuxin Jiang, Lifeng
+Shang, Qun Liu, and Kam-Fai Wong. 2024.
+M4LE: A multi-ability multi-range multi-task
+multi-domain long-context evaluation bench
+mark for large language models. In Proceedings
+11
+of the 62nd Annual Meeting of the Association
+for Computational Linguistics (Volume 1: Long
+Papers).
+Yash Madhani, Mitesh M Khapra, and Anoop
+Kunchukuttan. 2023a.
+Bhasa-abhijnaanam:
+Native-script and romanized language identifi
+cation for 22 indic languages. In Proceedings of
+the 61st Annual Meeting of the Association for
+Computational Linguistics (Volume 2: Short Pa
+pers).
+Yash Madhani, Sushane Parthan, Priyanka Be
+dekar, Gokul Nc, Ruchi Khapra, Anoop
+Kunchukuttan, Pratyush Kumar, and Mitesh M
+Khapra. 2023b. Aksharantar: Open indic
+language transliteration datasets and models for
+the next billion users. In Findings of the associ
+ation for computational linguistics: Emnlp 2023.
+Quinn McNemar. 1947. Note on the sampling error
+of the difference between correlated proportions
+or percentages. Psychometrika, 12(2):153–157.
+Mistral AI. 2026. Models overview. Mistral AI
+Documentation. Accessed: May 24, 2026.
+Carol Myers-Scotton. 1993. Social motivations for
+codeswitching: Evidence from Africa. Oxford
+University Press.
+OpenAI. 2026. GPT-3.5 Turbo model documen
+tation. OpenAI Developer Documentation. Ac
+cessed: May 24, 2026.
+Priyaranjan Pattnayak and Sanchari Chowdhuri.
+2026. IndicSafe: a benchmark for evaluating
+multilingual LLM safety in south asia. arXiv
+preprint arXiv:2603.17915.
+Shana Poplack. 2001. Code-switching (linguistic).
+In Neil J. Smelser and Paul B. Baltes, editors,
+International Encyclopedia of the Social and Be
+havioral Sciences, pages 2062–2065. Elsevier Sci
+ence.
+Mohd Sanad Zaki Rizvi, Anirudh Srinivasan,
+Tanuja Ganu, Monojit Choudhury, and
+Sunayana Sitaram. 2021. GCM: A toolkit for
+generating synthetic code-mixed text. In Pro
+ceedings of the 16th Conference of the European
+Chapter of the Association for Computational
+Linguistics: System Demonstrations.
+Bernard Rosner, Robert J Glynn, and Mei-Ling T
+Lee. 2006. The wilcoxon signed rank test for
+paired comparisons of clustered data. Biomet
+rics, 62(1):185–192.
+Sarvam AI. 2024.
+Sarvam-1.
+https://
+huggingface.co/sarvamai/sarvam-1.
+Ayan Sengupta, Soham Das, Md Shad Akhtar, and
+Tanmoy Chakraborty. 2024. Social, economic,
+and demographic factors drive the emergence
+of hinglish code-mixing on social media. Hu
+manities and Social Sciences Communications,
+11(1):1–12.
+Dama Sravani and Radhika Mamidi. 2023. En
+hancing code-mixed text generation using syn
+thetic data filtering in neural machine transla
+tion. In Proceedings of the 27th Conference
+on Computational Natural Language Learning
+(CoNLL).
+Vivek Srivastava and Mayank Singh. 2021. Chal
+lenges and limitations with the metrics mea
+suring the complexity of code-mixed text. In
+Proceedings of the Fifth Workshop on Computa
+tional Approaches to Linguistic Code-Switching.
+Gemma Team, Thomas Mesnard, Cassidy Hardin,
+Robert Dadashi, Surya Bhupatiraju, Shreya
+Pathak, Laurent Sifre, Morgane Rivière, Mi
+hir Sanjay Kale, Juliette Love, and 1 others.
+2024. Gemma: Open models based on gem
+ini research and technology. arXiv preprint
+arXiv:2403.08295.
+Yizhong Wang, Swaroop Mishra, Pegah Alipoor
+molabashi, Yeganeh Kordi, Amirreza Mirzaei,
+Atharva Naik, Arjun Ashok, Arut Selvan
+Dhanasekaran, Anjana Arunkumar, David Stap,
+and 1 others. 2022. Super-naturalinstructions:
+Generalization via declarative instructions on
+1600+ nlp tasks. In Proceedings of the 2022 con
+ference on empirical methods in natural language
+processing.
+Genta Winata, Alham Fikri Aji, Zheng Xin
+Yong, and Thamar Solorio. 2023. The decades
+progress on code-switching research in NLP: A
+systematic survey on trends and challenges. In
+Findings of the Association for Computational
+Linguistics: ACL 2023.
+An Yang, Anfeng Li, Baosong Yang, Beichen
+Zhang, Binyuan Hui, Bo Zheng, Bowen Yu,
+Chang Gao, Chengen Huang, Chenxu Lv, and
+1 others. 2025. Qwen3 technical report. arXiv
+preprint arXiv:2505.09388.
+Qingyan Yang, Tongxi Wang, and Yunsheng Luo.
+2026.
+ChiEngMixBench: Evaluating large
+language models on spontaneous and natural
+chinese-english code-mixed generation. arXiv
+preprint arXiv:2601.16217.
+Yilun
+Yang and Yekun Chai. 2025a.
+CodeMixBench:
+Evaluating code-mixing
+capabilities of LLMs across 18 languages. In
+Proceedings of the 2025 Conference on Empiri
+cal Methods in Natural Language Processing.
+Yilun
+Yang and Yekun Chai. 2025b.
+Codemixbench:
+Evaluating
+code-mixing
+capabilities of llms across 18 languages. In Pro
+ceedings of the 2025 Conference on Empirical
+Methods in Natural Language Processing.
+12
+Table of Contents for Appendix
+A Task Details
+13
+A.1 Data Description . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13
+B CM-ing Framework Development
+14
+B.1 Code Mixing Framework . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+B.2 Prompt for Output Refinement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+B.3 Prompt for Code-Mixed Substitutions. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 16
+B.4 Code-mixing Intensity Levels and Target Ranges . . . . . . . . . . . . . . . . . . . . . . . . . . . 17
+B.5 Handling Task-specific Edge Cases . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 17
+B.6 Baseline Dataset Creation details . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+B.7 Indi-RomCoM Content Analysis . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+C Evaluation Details
+18
+C.1 Models . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+C.2 Prompting Protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+C.3 Evaluation Metrics . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 20
+D Additional Results
+22
+D.1 Task Accuracy with Few-shot Prompting . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
+D.2 Finetuning Ablation Study . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
+A Task Details
+A.1 Data Description
+Table 8 reports the original number of in
+stances drawn from each source dataset before
+any preprocessing, filtering, or code-mixing.
+These counts represent the full, unmodified
+benchmark splits as released by their respec
+tive authors. All instances were retained to
+construct the code-mixed and romanised vari
+ants described in Section 3.1, yielding the
+training corpus used in our fine-tuning abla
+tion experiments.
+The reasoning dimension comprises
+three tasks, two drawn from Super
+NaturalInstructions
+(SuperNI)2
+(Wang
+et al., 2022) and GSM8K3(Cobbe et al.,
+2021). (i) Word Analogy (SuperNI tasks
+1152–1159) requires identifying semantic
+relationships between concept pairs with
+structured explanations, probing lexical
+2https://github.com/allenai/
+natural-instructions/tree/master/tasks
+3https://huggingface.co/datasets/openai/
+gsm8k
+Task
+Label Schema
+N
+Word Analogy
+Correct (1) or Incorrect (0) and Explanation
+Question Decomp.
+48
+Sub-Questions Decomposition
+9,382
+Math Reasoning
+Paraphrase
+Numerics and COT Explanation 8,000
+Paraphrased (1) or Non-paraphrased (0)
+2,002
+Sentiment
+Inference
+Toxicity
+Negative (−1), Neutral (0), or Positive (1) 155
+Entailment (0), Neutral (1), or Contradiction (2)
+2,490
+Toxic (0) or Non-Toxic (1) and Refusal 10,000
+Total
+32,077
+Table 8: Original instance counts per task source.
+These figures reflect unmodified benchmark sizes
+prior to code-mixing and romanization. The full
+corpus of 32,077 instances forms the basis of the
+fine-tuning data used in the ablation study.
+and relational reasoning under CM framing.
+(ii) Question Decomposition (SuperNI
+tasks 168, 176, 184) requires decomposing
+complex questions into sub-questions across
+three subtypes, factual, procedural, and
+inverse synthesis, and testing whether models
+maintain logical step-reference chains under
+CM-ed instructions. (iii) Mathematical
+Reasoning (GSM8K) presents grade-school
+arithmetic problems requiring multi-step
+chain-of-thought, stratified by step count;
+this task isolates the effect of framing code
+mixing in explanations and/or reasoning
+13
+independently of content.
+The language understanding dimension
+covers three Indic NLP tasks sourced from
+the AI4Bharat IndicXtreme collection.4
+(iv) Paraphrase Detection (IndicXPara
+phrase5 (Gala et al., 2024)) presents balanced
+sentence pairs requiring binary semantic
+equivalence judgements.
+(v) Sentiment
+Analysis (IndicSentiment6 (Gala et al.,
+2024)) provides three-class product review
+classification. Sentiment-bearing vocabulary
+is among the most naturally code-mixed in
+South Asian digital communication, creating
+a direct interaction between task content and
+CM register. And, (vi) Natural Language
+Inference uses IndicXNLI7(Aggarwal et al.,
+2022) evaluates entailment, neutrality, and
+contradiction across premise-hypothesis pairs
+and is highly sensitive to CM due to the
+complexity of cross-sentence reasoning.
+Finally, for the (vii) Toxicity Detection
+task, instances are drawn from IndicAlign
+Toxic8 and supplemented with benign samples
+from IndicAlign-Instruct to ensure label bal
+ance (Khan et al., 2024b). This task evaluates
+whether models correctly identify and refuse
+harmful content in CM-ed register. Despite
+CM-ing being widely exploited to evade con
+tent moderation (Chitale et al., 2025), no exist
+ing benchmark on CM-ing includes this task.
+Languages We experiment with romanized
+Indic-English CM-ed registers spanning two
+major Indic language families: from the
+Indo-Aryan branch, we include Hindi (Hi
+En, ~610M speakers), Bengali (Bn-En, ~273M
+speakers), and Gujarati (Gu-En, ~55M speak
+ers); and from the Dravidian family, we in
+clude Tamil (Ta-En, ~87M speakers). The
+choice of these four languages cover the largest
+user populations in India and represent diverse
+resource levels, linguistic structures, and code
+mixing phenomena. All four languages pre
+dominantly follow Subject-Object-Verb (SOV)
+4https://huggingface.co/collections/
+ai4bharat/indicxtreme
+5https://huggingface.co/datasets/ai4bharat/
+IndicXParaphrase
+6https://huggingface.co/datasets/ai4bharat/
+IndicSentiment
+7https://huggingface.co/datasets/Divyanshu/
+indicxnli
+8https://huggingface.co/datasets/ai4bharat/
+indic-align/viewer/Toxic_Matrix
+word order, but differ substantially in mor
+phology and syntactic structure. Indo-Aryan
+languages display relatively fusional morphol
+ogy, whereas Tamil exhibits more agglutina
+tive characteristics, often leading to distinct
+constituent-order and lexical-mixing patterns
+in code-mixed discourse. Prior studies have
+also identified extensive verb-level and intra
+sentential mixing phenomena in Indic-English
+bilingual communication (Chitale et al., 2025;
+Jaavid et al., 2024).
+B CM-ing Framework Development
+B.1 Code Mixing Framework
+Bilingual speakers preferentially switch lexi
+cal categories while preserving syntactic com
+patibility across languages (Equivalence Con
+straint theory (Poplack, 2001) and the Ma
+trix Language Frame theory (Myers-Scotton,
+1993)). Based on these principles, we build a
+linguistically grounded framework for generat
+ing controlled Indic-English Romanized Code
+Mix (RCM)-ed instructions. This enables
+systematic variation of code-mixing intensity
+while preserving semantic consistency across
+tasks and language pairs. Following sections
+describe the framework design step by step.
+(I) English to Indic Translation. The
+SuperNI-based tasks Word Analogy and Ques
+tion Decomposition (Wang et al., 2022) along
+with the GSM8K mathematical reasoning
+task (Cobbe et al., 2021) are originally avail
+able only in English and lack coverage for In
+dic languages. To construct high-quality mul
+tilingual source instances prior to code-mixing,
+we first translate these English-only task in
+stances into the target Indic languages- Hindi,
+Bengali, Gujarati, and Tamil.
+To ensure semantic fidelity while maintain
+ing natural conversational phrasing, we adopt
+a two-step translation pipeline combining ma
+chine translation and manual verification. We
+use Google Translate’s Python library9 for ini
+tial translation generation and refine outputs
+using Anthropic Claude Sonnet 4.610. Manual
+validation of labels, decomposition structures,
+and logical relations remain unchanged after
+9https://pypi.org/project/googletrans/
+10https://www.anthropic.com/claude/sonnet
+14
+translation. This two-step refinement helps
+verify linguistic naturalness, correct SOV con
+stituent order, and preservation of task-critical
+structural markers. For all tasks, tokens like
+mathematical expressions, step labels, proper
+nouns, etc., are identified and excluded from
+the translation scope.
+For the remaining tasks sourced from mul
+tilingual Indic datasets, like IndicXNLI (Ag
+garwal et al., 2022), IndicAlign-Toxic (Chi
+tale et al., 2025), IndicXParaphrase, and In
+dicSentiment (Gala et al., 2024), native-script
+Indic translations are sourced directly from
+the original datasets, that provide profession
+ally verified translations across Bengali, Hindi,
+Gujarati, and Tamil. Additionally, Tamil
+translations were absent for IndicXParaphrase
+task (Khan et al., 2024b) and were therefore
+newly created as part of this work. The cor
+responding English language instances for In
+dicXNLI are extracted from Meta’s XNLI cor
+pus11 (Conneau et al., 2018).
+(II) Word-Selection Taxonomy. To en
+sure CM substitutions reflect natural bilingual
+switching behavior rather than arbitrary re
+placement, we assign each switchable word or
+phrase in the English source text to one of five
+categories based on its linguistic role, seman
+tic function, and documented naturalness as a
+CM switch point in bilingual corpora (Poplack,
+2001; Winata et al., 2023). Each substitu
+tion is logged with its category label, Indic re
+placement, and a linguistic rationale, produc
+ing structured annotation records that enable
+category-frequency analysis across tasks and
+language pairs. Table 9 summarizes the five
+categories, their switching policies, and illus
+trative examples across languages.
+(III) Code-mixing Intensity Levels.
+Three intensity levels ( 25%, 50% and 75%)
+are generated by activating different category
+subsets, creating a controlled progression from
+low to high code-mixing. We compute Code
+Mixing Index (CMI) at the token level as the
+proportion of English tokens replaced by In
+dic equivalents (Srivastava and Singh, 2021)12.
+Controlled code-mixed substitutions are gener
+11https://huggingface.co/datasets/facebook/
+xnli
+12CAT-0 tokens excluded from the denominator as
+their invariance is linguistically motivated rather than
+a pipeline artifact.
+ated using taxonomy-guided prompting with
+Claude Sonnet 4.6 and manually verified for
+semantic consistency. Each substitution is an
+notated with its category, Indic replacement,
+and linguistic rationale, producing structured
+records that support downstream analysis of
+substitution patterns across tasks, languages,
+and code-mixing intensities. At 25%-CM, only
+domain-specific terms are replaced while En
+glish sentence structure is preserved. At 75%
+CM, all categories are active, producing dense
+Romanized code-mixed text with a predomi
+nantly Indic sentence structure. The three in
+tensity levels with their active category sub
+sets and target CMI ranges, the prompt for
+generating code-mixed substitutions, and the
+handling of substitution edge cases are pro
+vided below.
+(IV) Romanization of Indic Script. Fol
+lowing CM substitutions, all Indic-script in
+stances are converted to their Latin script to
+produce the final romanized and code-mixed
+output, reflecting the dominant writing behav
+ior of multilingual South Asian users on smart
+phones and messaging platforms. We extract
+end-to-end Latin-script translations from Indi
+cLLMSuite (Khan et al., 2024b) for the tasks
+available. Additionally, we use two Python li
+braries Aksharantar13 (Madhani et al., 2023b),
+a large-scale AI4Bharat transliteration model
+covering 21 Indic languages and Akshara
+mukha14, another open-source transliteration
+tool that converts text across multiple In
+dic scripts while preserving phonetic consis
+tency. We intentionally retain natural translit
+eration variability rather than enforcing strict
+phoneme-level normalization, better reflecting
+real-world romanized CM usage and the or
+thographic variation encountered by deployed
+multilingual LLMs.
+B.2 Prompt for Output Refinement
+The following prompt was used to guide
+Claude Sonnet 4.6 in refining machine
+translated outputs from Google Translate into
+semantically faithful and linguistically natural
+Indic-language instances.
+13https://github.com/AI4Bharat/IndicXlit
+14https://pypi.org/project/aksharamukha/
+15
+Category Switching Policy
+Description
+Examples
+CAT-0
+CAT-C
+CAT-B
+CAT-D
+CAT-A
+CAT-E
+Never switched
+Switched at all CM levels
+Mathematical tokens (<<calc>> annotations, op
+erators, numerals), proper nouns, named entities,
+abbreviations, and structural step labels are pro
+tected since switching them would invalidate task
+outputs or break structural dependencies.
+Task-specific labels and domain evaluation terms.
+These represent the most natural CM switch
+points, as bilingual speakers often prefer L1 vocab
+ulary for abstract concepts (Bokamba, 1989).
+Switched at 50% and 75% Discourse markers and logical connectives, which
+are among the most frequently observed natural
+CM switches in bilingual corpora (Poplack, 2001;
+Myers-Scotton, 1993).
+Switched at 50% and 75%
+Concrete thematic nouns associated with the task
+domain.
+Switched at 75% only
+Switched at 75% only
+Function and structural words such as articles, cop
+ulas, and prepositions. Their replacement pro
+duces a more complete Indic sentence frame.
+Complete clause-level predicates that naturalise
+the sentence into the Indic syntactic frame.
+Step1:
+#1
+analogy/உவைம
+causation/कायर्-कारण
+quality/தரம்
+hence/எனேவ
+but/लेिकन
+however/তেব
+police/காவல்துைற
+battery/েবেটরী
+person/व्यिक्त
+the/அந்த
+is/है
+a/एक
+I cannot give a response/
+இந்தேகள்வக்குஎன்னால்
+பதலளிக்க முடியாது
+Table 9: Linguistically grounded word-selection taxonomy used for controlled Romanized Indic-English
+code-mixing generation.
+Prompt: English-to-Indic Translation Re
+finement
+System: You are an expert translator special
+ising in Hindi, Bengali, Gujarati, and Tamil.
+Your task is to refine machine-translated text
+to produce accurate, fluent, and contextually
+appropriate translations that reflect natural
+conversational phrasing.
+Instruction: You are given an English source
+sentence and its machine-translated output
+in {target_language}.
+Refine the machine
+translation according to the following guidelines:
+Guidelines:
+1. Preserve task structure: Do not alter step
+labels (e.g., #1, #2, Step 1:), mathematical
+expressions (e.g., <<2*8=16>>), and numerical
+values. These must appear exactly as in the
+source.
+2. Do not translate: Proper nouns (names of
+people, places, organisations), domain-specific
+acronyms, and quoted strings. Retain them
+verbatim from the English source.
+3. Ensure grammatical correctness: Verify
+subject-object-verb (SOV) constituent order
+appropriate to {target_language} and correct
+any morphological or agreement errors intro
+duced by machine translation.
+4. Maintain semantic fidelity: The refined
+translation must preserve the full meaning of
+the source. Do not add, omit, or paraphrase
+any content beyond what is needed for fluency.
+5. Natural phrasing: The output should read
+as natural, conversational {target_language}
+rather than a literal word-for-word rendering.
+6. Label and logic preservation: For classi
+fication and reasoning tasks, logical relations
+(entailment, contradiction, neutrality), senti
+ment polarities, and analogy structures must
+remain unchanged after translation.
+Input:
+• English source: {english_source}
+• Machine translation ({target_language}):
+{mt_output}
+Output: Return only the refined translation in
+{target_language}. Do not include any explana
+tion, commentary, or the original English text.
+B.3 Prompt for Code-Mixed
+Substitutions
+The following prompt was used to guide
+Claude Sonnet 4.6 in generating taxonomy
+guided, annotated code-mixed substitutions at
+three controlled intensity levels across all four
+Indic languages.
+Prompt: Taxonomy-Guided Code-Mixed
+Substitution Generation
+System: You are an expert computational lin
+guist. Your task is to generate controlled code
+mixed substitutions from English source text at
+a specified intensity level, following a predefined
+substitution taxonomy.
+Instruction: Given an English source sen
+tence and its full Indic translation in {tar
+get_language}, produce a code-mixed output at
+intensity level {cm_level} (25%, 50%, or 75%)
+by substituting a proportion of English tokens
+with their {target_language} equivalents accord
+ing to the category guidelines below.
+Substitution Taxonomy:
+• CAT-0: Invariant tokens like Mathematical
+expressions, step labels (e.g., #1, Step 1:),
+proper nouns, acronyms, and quoted strings.
+• CAT-A: Structural markers like Discourse
+connectors, sentence-initial conjunctions, sub
+ordinators (e.g., so, but, because, when).
+16
+• CAT-B: Functional words like Determiners,
+copulas, auxiliaries, negations (e.g., the, is,
+not, a).
+• CAT-C: Content words like High-frequency
+nouns, verbs, adjectives central to the task
+meaning (e.g., office, time, said, woman).
+• CAT-D: Domain-specific terms like Task
+critical terminology, reasoning markers, and
+domain nouns (e.g., decomposition, entailment,
+step, result).
+Intensity Level Guidelines:
+• 25%: Activate CAT-A and CAT-B only; sub
+stitute 1–3 tokens per sentence.
+• 50%: Activate CAT-A, CAT-B, and CAT-C;
+substitute 3–6 tokens per sentence.
+• 75%: Activate all categories (CAT-A through
+CAT-D); substitute 6–10 tokens per sentence.
+Annotation Requirement: For each substi
+tution made, provide a structured annotation
+in the {target_language} rationale field,
+recording the English source token, its Indic
+replacement, assigned category, and a brief lin
+guistic justification, alongside the sentence-level
+CMI scores for the premise and hypothesis.
+[english_token → indic_token | CAT-X: lin
+guistic rationale]; … || CMI_premise={score}
+CMI_hypothesis={score}
+Input:
+• English source: {english_source}
+• Indic translation ({target_language}):
+{indic_translation}
+• Target intensity: {cm_level}
+Output: Return ONLY the code-mixed sentence
+in {target_language} followed by the structured
+<language>_rationale annotation.
+B.4 Code-mixing Intensity Levels and
+Target Ranges
+The three intensity levels with their active cat
+egory subsets and target CMI ranges are re
+ported in Table 10.
+Level-CM
+CAT
+CMI
+Description
+25%
+C
+0.15–0.35
+Domain
+switched;
+terms
+English
+structure preserved
+50%
+75%
+B, C, D
+A–E
+0.35–0.60
+0.60–0.85
+Connectives and do
+main nouns added
+Dense CM with Indic
+sentence framing
+Table 10: Code-mixing (CM) intensity levels and
+target ranges of Code-Mixing Index (CMI). CAT
+= Categories
+B.5 Handling Task-specific Edge Cases
+A single universal taxonomy cannot be applied
+blindly across tasks with fundamentally dif
+ferent structural requirements. Without task
+specific adaptations, generation of code-mixed
+(CM-ed) instances would corrupt the very to
+kens that define task validity, e.g. switch
+ing a mathematical operator changes the an
+swer, missing a step label can break the ref
+erence chain in explanations, improper trans
+lation of a toxic prompt can change the con
+textual meaning. Therefore these adaptations
+are not exceptions to the framework but spe
+cial treatment of certain tokens while creating
+the code-mixed dataset for each task based on
+the structural contexts. Each selected task re
+quire specific adaptations of the general taxon
+omy to preserve task validity under CM-ing:
+(i) Word Analogy: Analogy sub-type la
+bels (causation, affordance, containment) are
+assigned to CAT-C, as these are the most
+natural L1 vocabulary15 choices when naming
+abstract relational categories. Proper nouns
+within analogy pairs are treated as CAT-0 re
+gardless of whether L1 equivalents exist, since
+swapping them would alter the relational con
+tent of the pair.
+(ii)
+GSM8K: Mathematical tokens
+(<<calculation>>, ####, numerals, and
+operators) are strict CAT-0. Only natural
+language framing around arithmetic steps
+is eligible for CM substitution. This makes
+GSM8K the task with the lowest achievable
+CMI across all CM levels — a linguistically
+meaningful property that isolates the effect of
+CM framing on reasoning from the effect of
+CM on content.
+(iii) Question Decomposition: Step la
+bels (Step1:, #1, Wikipedia page for step
+N:) are CAT-0 structural markers whose in
+tegrity is essential to the step-reference chain.
+Operational verbs (return, filter, retrieve) are
+assigned to CAT-C, while discourse connec
+tives linking steps are CAT-B.
+(iv) Toxicity Detection: The input toxic
+prompt is never code-mixed, preserving the
+original harmful content for accurate detection
+by the model. Only the output classification
+label and refusal explanation are subjected to
+CM. This design creates a distinctive evalua
+tion condition: does the model correctly detect
+and refuse toxic content when the surrounding
+discourse, i.e. the instruction and explanation,
+is expressed in CM register?
+15Refers to the vocabulary of a speaker’s first lan
+guage, i.e. their native or dominant language.
+17
+B.6 Baseline Dataset Creation details
+We also randomly draw 100 samples from the
+ToxicMatrix original dataset of 90.3K (Chi
+tale et al., 2025). However, for the word
+analogy from Super-NI, the source pool (tasks
+1152–1159) contained only 48 positive and neg
+ative instances with validated explanations;
+we supplement these with 52 manually con
+structed analogy pairs, balanced across posi
+tive (correct analogy) and negative (incorrect
+analogy) labels and covering the same rela
+tion types, causation, affordance, containment,
+and functional similarity as the original in
+stances, yielding a final set of 100 instances
+consistent with all other tasks.
+B.7 Indi-RomCoM Content Analysis
+Toxicity exhibits the highest CMI at every
+level (µ75 = 0.981), driven by high-frequency
+CAT-C task-label vocabulary, while GSM8K
+consistently shows the lowest (µ75 = 0.152)
+due to the high proportion of CAT-0 protected
+tokens. Question Decomposition shows the
+steepest level-to-level growth (∆ = 0.186 from
+25% to 75%), driven by CAT-E full-clause sub
+stitutions at 75%-CM. Figure 6 shows the full
+CMI distributions as violin plots.
+Across 700 instances, four languages, and
+three CM intensity levels, the rationale anno
+tation records 33,632 structured substitution
+logs. At 25%-CM, all 6,925 substitutions are
+CAT-C (domain/task terminology) across ev
+ery task without exception, confirming that
+the taxonomy’s single-category activation at
+low intensity holds empirically. Figures 3a
+b show the proportional substitution break
+down at 50%-CM and 75%-CM respectively,
+where multi-category activation produces in
+terpretable task-level variation. At 50%-CM
+(Figure 3a), CAT-C reduces to 52.6% of all
+substitutions as CAT-B (logical connectives,
+29.1%) and CAT-D (content domain nouns,
+18.3%) are activated. Task-level variation
+is pronounced: CAT-B dominates for NLI
+(66.1%) and Paraphrase (54.7%), where logical
+connectives are syntactically dense in premise
+hypothesis pairs and sentence-pair compar
+isons respectively, while CAT-D is proportion
+ally larger for GSM8K (25.8%) and Toxic
+ity, where mathematical and safety domain
+nouns constitute the primary switchable con
+tent. At 75%-CM (Figure 3b), CAT-A (func
+tion words, 5.6%) and CAT-E (full predicate
+phrases, 6.8%) appear for the first time, com
+pleting the Indic sentence frame. CAT-E is
+most prominent in Toxicity (11.4%), where the
+refusal opener I cannot give a response is the
+primary full-predicate switch, and in Question
+Decomposition (6.6%), where step-chain pred
+icates are switched as units. CAT-A is largest
+in Question Decomposition (12.5%), reflect
+ing the high density of article-bearing struc
+tural phrases in decomposition step sequences.
+These patterns confirm that the word-selection
+taxonomy produces category activations that
+are both systematic across tasks and linguisti
+cally motivated within each task domain.
+C Evaluation Details
+C.1 Models
+We evaluate models spanning four categories:
+proprietary commercial systems, open-weight
+general-purpose models, open-weight models
+with Indic-focused pretraining, and fine-tuned
+ablation variants. This design enables system
+atic comparison across scale, Indic-script expo
+sure, and CM-specific training. Table ?? sum
+marises the full model set.
+Fine-tuning ablation. Our central hypoth
+esis is that Romanized code-mixing (RCM)
+represents a systematic challenge that cannot
+be resolved through scale or Indic pretraining
+alone. To test this, we fine-tune three models—
+LLaMA-3.2-3B, LLaMA-3.1-8B, and Gemma
+2-7B—on the Indi-RomCoM training split,
+comprising 395,076 instances across 7 tasks, 4
+languages, and 3 CM intensity levels (80% of
+instances per task stratified by CM level). We
+denote these fine-tuned variants with the sub
+script CM.
+All three models are fine-tuned using
+LoRA (Hu et al., 2022) with rank r = 16,
+α = 32, batch size 8, learning rate 1×10−4, a
+cosine scheduler with 3% warmup, and 3 train
+ing epochs on a single A100 80GB GPU. Hy
+perparameters follow Chitale et al. (2025). If
+a fine-tuned variant outperforms its untuned
+counterpart despite training on a relatively
+small corpus, this constitutes direct evidence
+that CM-specific supervision is necessary and
+that existing general Indic resources do not
+cover the RCM register.
+18
+Task Language ChrF κ@25% κ@50% κ@75% κAvg
+WordAnalogy
+Tamil 71.99 0.00 0.00 0.00 0.00
+Bengali 74.08 0.00 0.00 0.00 0.00
+Hindi 62.00 0.00 0.00 0.00 0.00
+Gujarati 59.95 1.00 1.00 1.00 1.00
+MathGSM8K
+Tamil 71.99 0.00 0.00 0.00 0.00
+Bengali 74.08 0.00 0.00 0.00 0.00
+Hindi 62.00 0.00 0.00 0.00 0.00
+Gujarati 59.95 1.00 1.00 1.00 1.00
+QuestionDecomp
+Tamil 71.99 1.00 0.00 0.00 0.33
+Bengali 74.08 1.00 0.00 0.00 0.33
+Hindi 62.00 N/A N/A N/A N/A
+Gujarati 59.95 1.00 0.00 0.00 0.33
+Paraphrase
+Tamil 71.99 1.00 1.00 1.00 1.00
+Bengali 74.08 1.00 1.00 1.00 1.00
+Hindi 62.00 1.00 1.00 1.00 1.00
+Gujarati 59.95 1.00 1.00 1.00 1.00
+Sentiment
+Tamil 71.99 1.00 1.00 1.00 1.00
+Bengali 74.08 1.00 1.00 1.00 1.00
+Hindi 62.00 1.00 1.00 1.00 1.00
+Gujarati 59.95 1.00 1.00 1.00 1.00
+NLI
+Tamil 71.99 1.00 1.00 1.00 1.00
+Bengali 74.08 1.00 1.00 1.00 1.00
+Hindi 62.00 1.00 1.00 1.00 1.00
+Gujarati 59.95 1.00 1.00 1.00 1.00
+ToxicMatrix
+Tamil 71.99 0.00 0.00 1.00 0.33
+Bengali 74.08 0.00 0.00 0.00 0.00
+Hindi 62.00 0.00 0.00 1.00 0.33
+Gujarati 59.95 1.00 1.00 1.00 1.00
+Table11:Detailedbenchmarkvalidationresultspertask, language,andCMintensitylevel.ChrFscores
+measuretranslationfidelity(charactern-gramoverlapbetween50%-CMRomanisedoutputandEnglish
+sourcetext).Cohen’sκmeasurespairwisenaturalnessagreementbetweentwoindependentnative-speaker
+annotatorsateachCMlevel.N/A=ratingsunavailableforHindi inQuestionDecomposition.
+C.2 PromptingProtocol
+Conditions. Allmodelsareevaluatedunder
+twoconditions:Zero-shot(ZS): thetaskin
+structionandinstanceareprovidedinthetar
+get register (English / 25%-CM/ 50%-CM
+/75%-CM)withnodemonstrations. 3-shot
+(FS-3): threedemonstrationsinthesameCM
+register as the query are prepended, drawn
+fromheld-out instancesstratifiedtocoverall
+labelclasses.
+Template structure. Every prompt fol
+lowsafour-parttemplate: (i)abrieftaskdef
+initioninthetargetregister; (ii)theinstance
+content; (iii) a structured output specifica
+tion; (iv) a register-maintenance instruction:
+“Please respond in the same language and
+scriptastheinput.” Pilotexperimentsconfirm
+thatwithout clause (iv), all evaluatedmod
+elsdefaulttoEnglishregardlessofCMinput
+register,making it impossible todistinguish
+genuine register defection from instruction
+followingfailure.
+Task-specificprompts. Table5showthe
+prompt template for eachtask. [INPUT]de
+notestheinstancefieldand[DEMO_k]denotes
+the k-th few-shot demonstration; both are
+filledwiththeromanisedCMtextatthetarget
+intensitylevel.Thesametemplateisusedfor
+zero-shot (omittingthedemonstrationblock)
+andfew-shot(includingthreedemonstrations
+19
+CMI Distribution: 25%CM
+CMI Distribution: 50%CM
+CMI Distribution: 75%CM
+100
+80
+60
+CMI
+40
+20
+ 0
+Figure 6: CMI distributions across tasks at each CM intensity level (violin plots). Dashed lines at
+CMI= 0.35 and 0.60 delimit the target mid-intensity band. All pairwise CM-level differences significant
+at p < 10−100 (Wilcoxon signed-rank, Bonferroni-corrected).
+before the query).
+C.3 Evaluation Metrics
+We employ four complementary metrics cap
+turing task correctness, register fidelity, per
+formance degradation, and tokeniser-level rep
+resentational capacity.
+(i) Task Accuracy (Acc). For the four
+classification tasks (Sentiment, NLI, Para
+phrase, Toxicity), accuracy is the proportion
+of predictions that exactly match the gold la
+bel yi over N instances:
+Acc = 1
+N 
+N∑
+i=1
+1[ˆyi = yi].
+For the three generation tasks (GSM8K,
+Question Decomposition, Word Analogy), we
+use task-specific criteria: final-answer exact
+match for GSM8K; binary correctness against
+gold decomposition structures for Question
+Decomposition; and a structured semantic
+relationship rubric for Word Analogy. For
+generation tasks, a GPT-4o judge evaluates
+responses on a 3-point Likert scale (Chitale
+et al., 2025); we report human–LLM agree
+ment on a held-out subset. Higher accuracy
+is better; a decrease from the English baseline
+to any CM condition is direct evidence of per
+formance degradation.
+(ii) Register Defection Rate (RDR).
+RDR measures the proportion of responses
+written in English when the input is in CM
+register, capturing a failure mode orthogonal
+to task accuracy. Let L(t) be the language of
+token t identified by IndicLID (Madhani et al.,
+2023a); a response ri is defective (di = 1) if
+more than 70% of its content tokens are iden
+tified as English:
+RDR= 1
+N 
+N∑
+i=1
+di = 1
+di,
+[ |{t ∈ ri : L(t) = en}|
+|ri|
+] (2)
+>0.70
+RDR is computed separately for label tokens
+and explanation tokens, since a model may
+correctly emit a CM label while defecting to
+English in its explanation—a partial defection
+mode that full-response identification would
+miss. Lower RDR is better; RDR= 0 indicates
+perfect register maintenance.
+Word Analogy
+GSM 8K
+Question
+Decomposition
+(1)
+(iii) Vocabulary Coverage Rate (VCR).
+VCR measures the proportion of unique
+switched Indic tokens in Indi-RomCoM that
+appear as complete (non-fragmented) entries
+in model m’s tokeniser:
+VCRm,ℓ = |{t ∈ VCM : t ∈ Vm}|
+|VCM|
+,
+(3)
+where VCM is the set of unique Indic tokens
+introduced by CM substitution and Vm is the
+tokeniser vocabulary of model m. A low VCR
+implies that common Indic tokens are repre
+sented as subword fragments, hypothesised to
+be negatively correlated with RDR (Jaavid
+et al., 2024): models that cannot represent In
+dic tokens as complete units are less likely to
+generate them faithfully. Hence, higher VCR
+is better.
+(iv) Performance Gap (PG). PG quan
+tifies the absolute accuracy degradation from
+the English baseline to each CM condition:
+PGl = Acc(English) − Acc(CMl), l ∈
+Paraphrase
+Sentiment
+NLI
+Toxicity
+Word Analogy
+GSM 8K
+Question
+Decomposition
+Paraphrase
+Sentiment
+NLI
+Toxicity
+Word Analogy
+GSM 8K
+Question
+Decomposition
+Paraphrase
+Sentiment
+NLI
+Toxicity
+20
+Family Model BL 25%-CM 50%-CM 75%-CM PG-25 PG-50 PG-75
+Closed
+GPT-3.5-Turbo 57.8±27.1 52.4±24.3 51.0±23.8 50.3±23.6 +5.4 +6.8 +7.5
+ClaudeOpus4.6 74.6±21.0 70.1±20.5 68.4±20.1 67.6±19.9 +4.5 +6.2 +7.0
+Gemini3.5Flash 67.2±24.7 62.9±23.1 61.3±22.7 60.5±22.4 +4.3 +5.9 +6.7
+LLaMA
+LLaMA-3.2-1B 30.6±15.8 18.2±6.3 18.4±7.1 18.3±7.0 +12.4 +12.2 +12.3
+LLaMA-3.1-8B 57.3±32.0 55.8±34.7 54.9±34.1 55.0±34.2 +1.5 +2.4 +2.3
+LLaMA-3.1-70B 61.0±31.2 58.2±27.6 57.2±27.1 57.1±27.2 +2.8 +3.8 +3.9
+Mistral Mistral-3B 43.5±11.9 31.4±10.5 28.7±17.2 26.2±11.2 +12.1 +14.8 +17.3
+Mistral-7B 56.2±34.4 51.5±33.8 50.8±33.3 50.4±33.1 +4.7 +5.4 +5.8
+Qwen
+Qwen2.5-1.5B 49.8±25.8 47.1±26.7 47.2±26.8 47.1±26.7 +2.7 +2.6 +2.7
+Qwen2.5-7B 56.2±34.4 51.5±33.8 50.8±33.3 50.4±33.1 +4.7 +5.4 +5.8
+Qwen3-4B 38.6±14.3 41.2±22.5 40.1±20.7 39.7±20.5 −2.6 −1.5 −1.1
+Qwen3-14B 35.8±23.5 41.9±32.1 41.2±31.2 40.9±31.0 −6.1 −5.4 −5.1
+Qwen3.5-2B 64.7±39.1 58.4±33.9 58.9±34.9 58.7±35.0 +6.3 +5.8 +6.0
+Qwen3.5-9B 56.2±34.4 51.5±33.8 50.8±33.3 50.4±33.1 +4.7 +5.4 +5.8
+Gemma Gemma-E2B 49.3±29.6 48.3±23.0 47.2±22.1 47.0±22.0 +1.0 +2.1 +2.3
+Gemma-E4B 54.6±36.5 52.7±35.4 51.2±33.7 51.1±33.5 +1.9 +3.4 +3.5
+Indic
+Airavata-7B 44.9±34.8 43.1±31.6 40.2±29.2 39.5±29.1 +1.8 +4.7 +5.4
+TamilLLaMA-7B 32.8±35.5 35.1±34.3 33.8±34.6 33.7±34.7 −2.3 −1.0 −0.9
+Sarvam-30B 71.0±23.3 66.9±22.0 64.3±21.6 63.1±21.2 +4.1 +6.7 +7.9
+Table13:Averagetaskaccuracy(%)across7tasks in3-shotsetting,averagedover4languages(±SD
+acrosstasks).BL=Englishbaseline.PG=PerformanceGap(BL−CMlevel;positive=accuracydrop).
+CM=CodeMixing.Bold=bestBLperfamily.Valuesareapproximately7–8%higherthanthezero
+shotresultsinTable6,consistentwiththeregister-anchoringeffectof in-contextCMdemonstrations.
+Model Language Overall ExactMatch(%)byTask
+EM Defection GSM8k IndPar IndSent XNLI QDec
+LLaMA-3.2-3B(FT)
+All 86.3 99.9 98.5 99.7 52.6 99.2 100.0
+Bengali 99.6 100.0 — — — — —
+Gujarati 72.7 99.7 — — — — —
+Hindi 70.1 100.0 — — — — —
+Tamil 99.3 100.0 — — — — —
+LLaMA-3.1-8B(FT)
+All 86.4 99.9 98.7 100.0 68.4 99.6 100.0
+Bengali 99.7 100.0 — — — — —
+Gujarati 72.9 99.7 — — — — —
+Hindi 70.3 100.0 — — — — —
+Tamil 99.4 100.0 — — — — —
+Table14:Fine-tuningablationresultsforLLaMA-3.2-3BandLLaMA-3.1-8BusingQLoRAon50%-CM
+Romanisedinstructionpairs(allfourlanguages,7tasks;90%/10%train/evalsplit,neval=14,848).EM=
+ExactMatch(%);Defection=proportionofoutputsclassifiedasEnglish-register(>70%ASCIItokens);
+forRoman-scriptCMtargetsthis isexpectedtobehighanddoesnot indicategenerationfailure. Task
+columns showaggregateEMacross languages. IndPar=IndicParaphrase; IndSent=IndicSentiment;
+XNLI=IndicXNLI;QDec=QuestionDecomposition.
+{25%,50%,75%}ApositivePGatall3levels
+confirmsthatmodelsdegradeonCMinput;a
+monotonicallyincreasingPG(PG25<PG50<
+PG75)additionallyconfirmsthatdegradation
+scaleswithCMintensity.Task-levelvariation
+inPGtestswhetherdifficultyistask-specific;
+model-levelvariationtestswhetherscaleorIn
+dicpretrainingconfersrobustness.
+Statisticalanalysis. Weassesssignificance
+usingtheWilcoxonsigned-ranktest (Rosner
+etal.,2006)(paired,non-parametric),compar
+ingper-instanceaccuracybetweentheEnglish
+baselineandeachCMcondition,withBonfer
+roni correctionacross all 21 conditionpairs
+(7 tasks×3CMlevels). Effect sizes are re
+portedasCohen’sd(Cohen,2013)onpaired
+21
+accuracy differences.
+For the fine-tuning
+ablation, we additionally apply McNemar’s
+test (McNemar, 1947) on paired binary ac
+curacy vectors to assess whether CM-specific
+training produces a significant improvement,
+and Spearman’s ρ to quantify the hypothe
+sised negative correlation between VCR and
+RDR across model–language pairs.
+D Additional Results
+D.1 Task Accuracy with Few-shot
+Prompting
+This section details the task-by-task perfor
+mance distributions under few-shot prompting
+conditions across different language varieties
+and intensity tiers. In our main evaluation
+setup, adding three contextual demonstrations
+explicitly shows models how to preserve struc
+tural outputs and language constraints. While
+this historical scaffolding improves overall tar
+get output compliance, its effectiveness varies
+significantly depending on the core reasoning
+demands of individual tasks.
+A comprehensive breakdown of accuracy
+patterns across all evaluation settings is doc
+umented in Table 13. For simpler categorical
+classifications like sentiment analysis and para
+phrase detection, few-shot conditioning pro
+vides immediate stability. The historical con
+text helps models overcome initial script con
+fusion and focus on tracking semantic tokens
+cleanly. However, for complex tasks requir
+ing long-form text tracking, such as mathe
+matical reasoning and question decomposition,
+the additional context offers limited protec
+tion against increasing code-mixing density.
+Full tracking data in the table confirms that
+while few-shot prompts stabilize basic format
+ting compliance, they do not resolve the fun
+damental linguistic challenges posed by dense
+romanized blending.
+D.2 Finetuning Ablation Study
+Our fine-tuning ablation experiments evalu
+ate whether the difficulties posed by roman
+ized code-mixing can be solved through tar
+geted supervision rather than simple parame
+ter scaling. We isolate performance changes
+across our three specialized models by train
+ing them on a localized split encompassing
+balanced language and intensity distributions.
+This comparative strategy tests the core hy
+pothesis that standard multilingual pretrain
+ing configurations fail to expose models to nat
+ural romanized registers.
+The exact numerical improvements and
+comparative evaluation results for all fine
+tuned configurations are provided in Ta
+ble 14. The experimental outcomes con
+firm that explicit supervision yields sub
+stantial performance improvements across all
+seven instruction-following tasks.
+These
+tuned variants consistently outperform their
+larger general-purpose baselines despite be
+ing trained on a relatively compact corpus.
+This distinct performance gap validates the
+necessity of register-specific training resources,
+demonstrating that specialized fine-tuning es
+tablishes critical linguistic boundaries that
+standard language scaling cannot replicate
+alone

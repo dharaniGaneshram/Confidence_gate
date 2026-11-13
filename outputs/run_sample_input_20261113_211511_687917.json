@@ -1,0 +1,28 @@
+{
+    "confidence_gate": {
+        "confidence": "low",
+        "signals": {
+            "coverage": 1.0,
+            "margin": -0.15000000000000002,
+            "margin_reliable": true,
+            "self_check": "sufficient"
+        },
+        "score_margin": {
+            "value": -0.15000000000000002,
+            "reliable": true,
+            "budget_hit": false,
+            "reason": "Margin calculated successfully."
+        },
+        "reasons": [
+            "Evidence coverage or sufficiency is not strong enough."
+        ]
+    },
+    "router": {
+        "route": "recite",
+        "answer": "Dummy answer generated for testing.",
+        "widen_attempts": 0,
+        "final_confidence": "low",
+        "context": "",
+        "notes": ""
+    }
+}

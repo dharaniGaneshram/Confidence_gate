@@ -1,0 +1,34 @@
+{
+    "question": "What is machine learning?",
+    "required_concepts": [
+        {
+            "name": "Machine Learning",
+            "aliases": [
+                "machine learning",
+                "ML"
+            ]
+        },
+        {
+            "name": "Artificial Intelligence",
+            "aliases": [
+                "artificial intelligence",
+                "AI"
+            ]
+        },
+        {
+            "name": "Learning from Data",
+            "aliases": [
+                "learn from data",
+                "learning from data",
+                "learns from data"
+            ]
+        },
+        {
+            "name": "Algorithms",
+            "aliases": [
+                "algorithm",
+                "algorithms"
+            ]
+        }
+    ]
+}

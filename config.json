@@ -1,0 +1,20 @@
+{
+    "thresholds": {
+        "coverage": {
+            "very_low": 0.40,
+            "medium": 0.60,
+            "high": 0.80
+        },
+        "margin": {
+            "high": 0.10
+        }
+    },
+    "paths": {
+        "input_file": "test_data/sample_input.json",
+        "document_file": "test_data/full_document.txt",
+        "output_folder": "outputs"
+    },
+    "models": {
+    "self_check_model": "tinyllama:latest"
+}
+}

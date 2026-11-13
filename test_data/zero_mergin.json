@@ -1,0 +1,48 @@
+{
+    "question": "What is machine learning?",
+    "doc_id": "machine_learning_003",
+    "sentences": [
+        {
+            "id": 1,
+            "text": "Machine learning is a branch of artificial intelligence.",
+            "position": 1,
+            "score": 0.95,
+            "selected": true,
+            "is_neighbor": false
+        },
+        {
+            "id": 2,
+            "text": "Machine learning enables computers to learn from data.",
+            "position": 2,
+            "score": 0.80,
+            "selected": true,
+            "is_neighbor": false
+        },
+        {
+            "id": 3,
+            "text": "Machine learning uses algorithms to identify patterns.",
+            "position": 3,
+            "score": 0.80,
+            "selected": false,
+            "is_neighbor": false
+        },
+        {
+            "id": 4,
+            "text": "Machine learning is used in recommendation systems.",
+            "position": 4,
+            "score": 0.65,
+            "selected": false,
+            "is_neighbor": false
+        }
+    ],
+    "selected_ids": [1, 2],
+    "tokens_original": 700,
+    "tokens_selected": 200,
+    "budget": 250,
+    "budget_hit": false,
+    "config": {
+        "top_k": 2,
+        "window": 0,
+        "budget": 250
+    }
+}
