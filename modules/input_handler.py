@@ -3,10 +3,10 @@ from typing import List, Dict, Any
 
 
 class SentenceCandidate(BaseModel):
-    id: int
+    id: str
     text: str
     position: int
-    score: float = Field(ge=0, le=1)
+    score: float 
     selected: bool
     is_neighbor: bool = False
 
@@ -18,7 +18,7 @@ class HighlighterInput(BaseModel):
 
     sentences: List[SentenceCandidate]
 
-    selected_ids: List[int]
+    selected_ids: List[str]
 
     tokens_original: int = Field(ge=0)
     tokens_selected: int = Field(ge=0)

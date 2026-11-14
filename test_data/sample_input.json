@@ -1,74 +1,2399 @@
+
 {
-    
-    "dataset_name": "small_margin",
-    "question": "What is machine learning?",
-    "doc_id": "machine_learning_small_margin",
+    "dataset_name": "large_margin",
+    "question": "What are the main challenges in processing different document formats in RAG systems?",
+    "doc_id": "afe3216e81df5a07",
     "sentences": [
         {
-            "id": 1,
-            "text": "Machine learning is a branch of artificial intelligence.",
-            "position": 0,
-            "score": 0.91,
-            "selected": true,
-            "is_neighbor": false
-        },
-        {
-            "id": 2,
-            "text": "Machine learning enables computers to learn from data.",
+            "id": "s0001",
+            "text": "# **Advanced ingestion process powered by LLM parsing for RAG system** Author: Arnau Perez Perez _Applus+ IDIADA, PO Box 20 Santa Oliva, 43710 L’Albornar Tarragona, Spain._ Advisor: Xavier Vizcaino Gascon<sup>_∗_</sup> (Dated: December 16, 2024) **Abstract:** Retrieval Augmented Generation (RAG) systems struggle with processing multimodal documents of varying structural complexity.",
             "position": 1,
-            "score": 0.87,
+            "score": 0.555,
             "selected": true,
-            "is_neighbor": false
+            "is_neighbor": false,
+            "page": 1
         },
         {
-            "id": 3,
-            "text": "Machine learning uses algorithms to identify patterns.",
+            "id": "s0002",
+            "text": "This paper introduces a novel multi-strategy parsing approach using LLM-powered OCR to extract content from diverse document types, including presentations and high text density files both scanned or not.",
             "position": 2,
-            "score": 0.84,
+            "score": 0.3302,
             "selected": true,
-            "is_neighbor": false
+            "is_neighbor": true,
+            "page": 1
         },
         {
-            "id": 4,
-            "text": "Machine learning improves performance through experience.",
+            "id": "s0003",
+            "text": "The methodology employs a node-based extraction technique that creates relationships between different information types and generates context-aware metadata.",
             "position": 3,
-            "score": 0.81,
-            "selected": true,
-            "is_neighbor": false
+            "score": 0.2229,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
         },
         {
-            "id": 5,
-            "text": "Machine learning is used in recommendation systems.",
+            "id": "s0004",
+            "text": "By implementing a Multimodal Assembler Agent and a flexible embedding strategy, the system enhances document comprehension and retrieval capabilities.",
             "position": 4,
-            "score": 0.80,
+            "score": 0.3694,
             "selected": false,
-            "is_neighbor": false
+            "is_neighbor": false,
+            "page": 1
         },
         {
-            "id": 6,
-            "text": "Machine learning can support medical diagnosis.",
+            "id": "s0005",
+            "text": "Experimental evaluations across multiple knowledge bases demonstrate the approach’s effectiveness, showing improvements in answer relevancy and information faithfulness. #### **I.",
             "position": 5,
-            "score": 0.78,
+            "score": 0.0991,
             "selected": false,
-            "is_neighbor": false
+            "is_neighbor": false,
+            "page": 1
         },
         {
-            "id": 7,
-            "text": "Machine learning is used for image recognition.",
+            "id": "s0006",
+            "text": "INTRODUCTION** #### **II.",
             "position": 6,
-            "score": 0.75,
+            "score": 0.1417,
             "selected": false,
-            "is_neighbor": false
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0007",
+            "text": "INGESTION** The field of Natural Language Processing has witnessed remarkable progress with the advent of Large Language Models (LLMs).",
+            "position": 7,
+            "score": 0.2085,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0008",
+            "text": "These models have demonstrated unprecedented capabilities in processing multimodal data, including text and images.",
+            "position": 8,
+            "score": 0.2906,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0009",
+            "text": "However, a significant challenge in LLM implementation remains the context window constraint, which limits the volume of information processed concurrently.",
+            "position": 9,
+            "score": 0.2267,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0010",
+            "text": "Leading providers have made substantial strides in expanding context limitations, with some models now capable of handling up to 2.000,000 tokens simultaneously [1].",
+            "position": 10,
+            "score": 0.1809,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0011",
+            "text": "Nevertheless, this expansion comes at a cost: increased context length correlates with longer time to first token (TTFT), potentially impacting model performance and user experience [2].",
+            "position": 11,
+            "score": 0.1934,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0012",
+            "text": "Recent work by Anthropic has explored caching techniques to mitigate this issue and reduce TTFT [3].",
+            "position": 12,
+            "score": 0.2405,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0013",
+            "text": "To further enhance LLM efficiency and overcome these challenges, researchers introduced the Retrieval Augmented Generation (RAG) system.",
+            "position": 13,
+            "score": 0.4261,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0014",
+            "text": "In this case for file data.",
+            "position": 14,
+            "score": 0.3324,
+            "selected": true,
+            "is_neighbor": true,
+            "page": 1
+        },
+        {
+            "id": "s0015",
+            "text": "A critical component of RAG is the ingestion phase, where the method of chunking plays a pivotal role in determining the quality of subsequently retrieved data.",
+            "position": 15,
+            "score": 0.5547,
+            "selected": true,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0016",
+            "text": "Common strategies include semantic, recursive, and hierarchical splitting.",
+            "position": 16,
+            "score": 0.2025,
+            "selected": true,
+            "is_neighbor": true,
+            "page": 1
+        },
+        {
+            "id": "s0017",
+            "text": "However, these approaches often fail to account for the diverse data structures present in source materials, such as images, tables, headers and pages.",
+            "position": 17,
+            "score": 0.4448,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0018",
+            "text": "Moreover, they can introduce computational challenges [4].",
+            "position": 18,
+            "score": 0.3597,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0019",
+            "text": "This paper presents a complex ingestion process that not only considers the various data structures within files but also incorporates relevant metadata and establishes hierarchical relationships to improve retrieval. > _∗_ arnau.perez@idiada.com #### **A.",
+            "position": 19,
+            "score": 0.3311,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0020",
+            "text": "Pre-processing** The pre-processing stage consists of three subprocesses: parsing, assembling and metadata extraction (see Figure 1).",
+            "position": 20,
+            "score": 0.291,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0021",
+            "text": "The parsing phase extracts image and text content using three strategies: 1. _FAST_ : Utilizes Python libraries to extract text and images from each document page.",
+            "position": 21,
+            "score": 0.3446,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0022",
+            "text": "2. _LLM_ : Employs a multimodal LLM for OCR task, extracting text, table content, and image information.",
+            "position": 22,
+            "score": 0.3061,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0023",
+            "text": "It describes images without text or extracts text from images.",
+            "position": 23,
+            "score": 0.2746,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0024",
+            "text": "In this case it was used Sonnet 3.5 v2 model from Anthropic Claude family [5].",
+            "position": 24,
+            "score": 0.0405,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0025",
+            "text": "3. _OCR_ : Leverages external and dedicated machine learning models for OCR task.",
+            "position": 25,
+            "score": 0.2814,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0026",
+            "text": "In this case it was used the AWS Textract service [6].",
+            "position": 26,
+            "score": 0.1688,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0027",
+            "text": "Before assembly, images are analyzed and described based on content type.",
+            "position": 27,
+            "score": 0.342,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0028",
+            "text": "For plots, the system extracts axis values, legends, labels, and provides a visualization description.",
+            "position": 28,
+            "score": 0.1105,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0029",
+            "text": "Flowcharts are described in terms of process relationships.",
+            "position": 29,
+            "score": 0.1269,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0030",
+            "text": "Page snapshots are then captured.",
+            "position": 30,
+            "score": 0.2339,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0031",
+            "text": "In the assembling process, a _Multimodal Assembler Agent_ integrates the page snapshot, images with descriptions, and text extracted from all three strategies for each page.",
+            "position": 31,
+            "score": 0.3059,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0032",
+            "text": "The agent produces a synthesized markdown file.",
+            "position": 32,
+            "score": 0.3638,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0033",
+            "text": "The output includes individual page markdowns, snapshots, and described images, which are concatenated into a comprehensive document-level markdown.",
+            "position": 33,
+            "score": 0.3443,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0034",
+            "text": "The metadata extraction phase employs a _Metadata Extractor Agent_ to analyze the consolidated markdown, extracting fields such as topic, keywords and summary.",
+            "position": 34,
+            "score": 0.3199,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0035",
+            "text": "The system also extracts metadata directly from the document (title, author, creation date, last modified date, etc.), providing a comprehensive information set about the processed document.",
+            "position": 35,
+            "score": 0.3377,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 1
+        },
+        {
+            "id": "s0036",
+            "text": "<!-- Start of picture text --> Ouput<br>MARKDOWN<br>(PAGES)<br>Parsing IMAGES x (Num Pages)<br>PDF FAST describe image SNAPSHOT(PAGES)<br>DOCX OCR ASSEMBLER MARKDOWN (PAGES)IMAGES<br>SNAPSHOT<br>PPTX LLM MARKDOWN<br>(DOCUMENT)<br>TEXT<br>extract metadata<br><!-- End of picture text --> FIG.",
+            "position": 36,
+            "score": 0.3021,
+            "selected": true,
+            "is_neighbor": true,
+            "page": 2
+        },
+        {
+            "id": "s0037",
+            "text": "Preprocessing pipeline for document ingestion in RAG system.",
+            "position": 37,
+            "score": 0.6971,
+            "selected": true,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0038",
+            "text": "The flowchart illustrates the parsing and assembling process for PDF, DOCX, and PPTX files.",
+            "position": 38,
+            "score": 0.3228,
+            "selected": true,
+            "is_neighbor": true,
+            "page": 2
+        },
+        {
+            "id": "s0039",
+            "text": "The pipeline incorporates FAST, OCR, and LLM parsing techniques, followed by image description, text extraction, and snapshot creation.",
+            "position": 39,
+            "score": 0.3421,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0040",
+            "text": "The assembler combines these elements to produce a markdown file per page and a concatenation of them. #### **B.",
+            "position": 40,
+            "score": 0.3873,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0041",
+            "text": "Processing** Following the segmentation of document content into markdown files, including snapshots, images, and metadata, the processing phase extracts information nodes from this data.",
+            "position": 41,
+            "score": 0.4199,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0042",
+            "text": "This approach aims to represent information in a vectorial space, with the primary challenge being the extraction of relevant information and determining its optimal embedding representation.",
+            "position": 42,
+            "score": 0.1342,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0043",
+            "text": "Figure 2 illustrates four distinct node types extractable from a single page ( _Page_ node): _Header_ , _Text_ , _Table_ and _Image_ nodes.",
+            "position": 43,
+            "score": 0.1838,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0044",
+            "text": "Text Nodes can encompass various forms of textual information, including paragraphs, words, sentences, ordered lists, and bullet point lists, each representing distinct information requiring specific consideration.",
+            "position": 44,
+            "score": 0.2016,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0045",
+            "text": "The processing phase comprises two primary subprocesses: _Splitting_ and _Contextualization_ .",
+            "position": 45,
+            "score": 0.2416,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0046",
+            "text": "During Splitting, markdown files are parsed and segmented into the aforementioned node types.",
+            "position": 46,
+            "score": 0.3645,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0047",
+            "text": "Four relationship types are established between nodes: next, previous, parent and child.",
+            "position": 47,
+            "score": -0.0188,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0048",
+            "text": "Only Header nodes can possess child nodes, facilitating context window tracking and hierarchical structuring.",
+            "position": 48,
+            "score": 0.1417,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0049",
+            "text": "For Text nodes exceeding a size threshold, a Recursive Splitter or Semantic Splitter is employed for chunking.",
+            "position": 49,
+            "score": 0.2559,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0050",
+            "text": "Contextualization focuses on Table and Header nodes.",
+            "position": 50,
+            "score": 0.2552,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0051",
+            "text": "A _Question Generator Agent_ creates a set of questions answerable using the information within the table or header node content.",
+            "position": 51,
+            "score": 0.0368,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0052",
+            "text": "Subsequently, a _Summary Generator Agent_ produces context-aware summaries for both table and header nodes.",
+            "position": 52,
+            "score": 0.096,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0053",
+            "text": "Following lower-level information node creation, the system generates _Page_ and _Document_ nodes, connecting previously established nodes to these higher-level nodes.",
+            "position": 53,
+            "score": 0.1346,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0054",
+            "text": "The Page node contains the individual page’s markdown representation, while the Document node aggregates all page markdowns.",
+            "position": 54,
+            "score": 0.2148,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0055",
+            "text": "Page nodes are also linked to their respective Document node.",
+            "position": 55,
+            "score": 0.1214,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0056",
+            "text": "In the final stage, the Summary Generator Agent is reemployed to generate summaries for both the Document node (if not previously extracted during preprocessing) and individual Page nodes.",
+            "position": 56,
+            "score": 0.2,
+            "selected": true,
+            "is_neighbor": true,
+            "page": 2
+        },
+        {
+            "id": "s0057",
+            "text": "This hierarchical approach to information extraction and representation enables comprehensive and context-aware structuring of document content, facilitating more effective retrieval and utilization in downstream RAG system processes. #### **C.",
+            "position": 57,
+            "score": 0.6041,
+            "selected": true,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0058",
+            "text": "Embedding** At this juncture, all components are prepared for integration.",
+            "position": 58,
+            "score": 0.1752,
+            "selected": true,
+            "is_neighbor": true,
+            "page": 2
+        },
+        {
+            "id": "s0059",
+            "text": "Three critical decisions must be made: selecting a vector database, choosing an embedding model and determining the data to be embedded.",
+            "position": 59,
+            "score": 0.2629,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0060",
+            "text": "The choice of vector database depends on various factors, with numerous options available in the industry.",
+            "position": 60,
+            "score": 0.2072,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0061",
+            "text": "Pinecone, specifically designed for embedding processes in RAG systems, offers optimized performance for this task.",
+            "position": 61,
+            "score": 0.5094,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0062",
+            "text": "Its namespace system provides excellent scalability, and it is engineered for rapid query execution.",
+            "position": 62,
+            "score": 0.2344,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0063",
+            "text": "However, it has a relatively low metadata storage capacity (40KB) [10], which may be a limiting factor depending on the volume of metadata generated.",
+            "position": 63,
+            "score": 0.2086,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0064",
+            "text": "Alternatively, OpenSearch, an open-source solution reimagined as a vector database, offers a hybrid approach.",
+            "position": 64,
+            "score": 0.1761,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0065",
+            "text": "It combines vector and ordinal database functionalities, enabling conventional queries unrelated to vector data.",
+            "position": 65,
+            "score": 0.168,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0066",
+            "text": "In contrast to Pinecone, OpenSearch does Barcelona, November 2024 2",
+            "position": 66,
+            "score": -0.0311,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 2
+        },
+        {
+            "id": "s0067",
+            "text": "<!-- Start of picture text --> # Human interaction classifier for LLM based chatbot Page Node<br>Header Node<br>## 3 The data<br>We are going to use a set of 1668 examples of pre-classified human interactions.",
+            "position": 67,
+            "score": 0.0969,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0068",
+            "text": "These will be divided into 666 for<br>Text Node training and 1002 for testing.",
+            "position": 68,
+            "score": 0.1882,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0069",
+            "text": "A 40-60 has been applied, thus giving a lot of importance to the test set.<br>The following figure shows some of the examples:<br>| SAMPLE | CLASS |<br>Can you make a summary of this text?",
+            "position": 69,
+            "score": 0.2184,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0070",
+            "text": "\"Legislation for the Australian Government's ... | Conversation |<br>I no, only focus on this sentence: Braking technique to enable maximum brake application speed | Conversation |<br>| In a factory give me sinonims of a limiting resource of activities | Conversation |<br>Table Node<br>I We need a translation of the file 'Company_Bylaws.pdf' into English, could you handle it? | Document_Translation 1<br>Please translate the file 'Product_Manual.xlsx' into English. | Document_Translation 1<br>Could you convert the document 'Data_Privacy_Policy.doc' into English, please? | Document_Translation |<br>I register my username in the IDIADA's human resources database | Services |<br>send a mail to random_user@gmail.com to schedule a meeting for the next weekend | Services<br>| book a electric car charger for me at IDIADA | Services |<br>Figure 1: Human Interaction Samples<br>All samples have been gathered from real AIDA users interactions.",
+            "position": 70,
+            "score": 0.2062,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0071",
+            "text": "All the samples remain in a RAw state,<br>unadulterated and without preprocess.",
+            "position": 71,
+            "score": 0.2296,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0072",
+            "text": "They have been manually labeled by the Datalab team.",
+            "position": 72,
+            "score": 0.1921,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0073",
+            "text": "There are no mislabeled<br>cases, despite the complexity in some cases given the abstractness of the interaction itself.<br>![This graphic is a bar chart showing the distribution of different types of interactions.",
+            "position": 73,
+            "score": 0.171,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0074",
+            "text": "The x-axis is labeled<br>\"Type of interaction\" and lists three categories: Conversation, Document_Translation, and Services.",
+            "position": 74,
+            "score": 0.1114,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0075",
+            "text": "The y-axis is<br>labeled \"No. of samples\" and ranges from 0 to 1400.<br>The chart shows three bars, one for each interaction type:<br>Image Node 1.",
+            "position": 75,
+            "score": 0.0086,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0076",
+            "text": "Conversation: The tallest bar, reaching approximately 1400 samples.<br>2.",
+            "position": 76,
+            "score": 0.0555,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0077",
+            "text": "Document_Translation: A shorter bar, reaching about 250 samples.<br>3.",
+            "position": 77,
+            "score": 0.2832,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0078",
+            "text": "Services: The shortest bar, with around 50 samples.<br>All bars are colored in a deep red.",
+            "position": 78,
+            "score": 0.2143,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0079",
+            "text": "The chart clearly illustrates that Conversation is the most common type of<br>interaction, followed by Document_Translation, with Services being the least<br>frequent.](c2804ea7-5a42-47c0-aaf9-ad73a163736c.png)<br>Figure 2: Distribution of examples<br><!-- End of picture text --> FIG.",
+            "position": 79,
+            "score": 0.268,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0080",
+            "text": "The illustration shows the assembling of the page 2 of the paper [16].",
+            "position": 80,
+            "score": 0.1697,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0081",
+            "text": "There are 5 kind of nodes represented: Header, Text, Table, Image and Page.",
+            "position": 81,
+            "score": 0.144,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0082",
+            "text": "Note that the image node is represented in the markdown file where the src is the id of image extracted plus its extension and the alt is the description of the image. not impose a strict distinction between metadata and the vector itself, thus removing specific storage limitations.",
+            "position": 82,
+            "score": 0.1581,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0083",
+            "text": "The selection of an embedding model is crucial, as it directly impacts the system’s ability to capture semantic relationships.",
+            "position": 83,
+            "score": 0.1482,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0084",
+            "text": "Popular choices include Voyage AI and Cohere models [11] [12].",
+            "position": 84,
+            "score": 0.0557,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0085",
+            "text": "The Cohere embedding family of models such as the _embed-multilingual-v3_ is one of the most powerful choices.",
+            "position": 85,
+            "score": 0.1674,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0086",
+            "text": "Mention that images can be embedded both by its description and therefore use a text embedding model or embed the image itself with a multimodal embedding model.",
+            "position": 86,
+            "score": 0.146,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0087",
+            "text": "Finally, the decision regarding which data to embed is pivotal. - Text: the text itself contains sufficient semantic information.",
+            "position": 87,
+            "score": 0.2391,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0088",
+            "text": "The embedding is generated from the chunk of text directly. - Image: visual content can be embedded using either multimodal or text embedding models.",
+            "position": 88,
+            "score": 0.1909,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0089",
+            "text": "In this case, the embedding is generated from the description or transcription of the image. - Table: tables can contain both numerical and textual data, making direct embedding of table content potentially ineffective.",
+            "position": 89,
+            "score": 0.1643,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0090",
+            "text": "Moreover, embedding numbers may result in poor semantic meaning.",
+            "position": 90,
+            "score": 0.145,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0091",
+            "text": "Therefore, the embedding is generated from the contextualized description of the table. - Header: this type of node is higher in the hierarchical scale and contains a greater amount of information.",
+            "position": 91,
+            "score": 0.1019,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0092",
+            "text": "Embedding all the text within the header is problematic for several reasons: not all models can embed such large amounts of text, the content includes images and tables (which are already embedded by lower hierarchy nodes), and using all the text could result in a generic embedding accumulating different semantic meanings in all directions.",
+            "position": 92,
+            "score": 0.2059,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0093",
+            "text": "Therefore, the embedding is generated from the summary. - Page: this case is similar to the header node, and the solution is the same: the embedding is generated from the summary.",
+            "position": 93,
+            "score": 0.077,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0094",
+            "text": "Barcelona, November 2024 3",
+            "position": 94,
+            "score": -0.0547,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 3
+        },
+        {
+            "id": "s0095",
+            "text": "- Document: this type of node is primarily used for pre-filtering before conducting the actual search in the vector database.",
+            "position": 95,
+            "score": 0.1238,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0096",
+            "text": "Therefore, the embedding is generated from the summary.",
+            "position": 96,
+            "score": 0.0794,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0097",
+            "text": "This node is linked with Q&A nodes. - Q&A: it can be associated with documents that contain a question, the answer, and some metadata.",
+            "position": 97,
+            "score": 0.0672,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0098",
+            "text": "The embedding is generated from the question.",
+            "position": 98,
+            "score": 0.0974,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0099",
+            "text": "While it’s possible to create an embedding from the answer, this approach has not been thoroughly tested.",
+            "position": 99,
+            "score": 0.1125,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0100",
+            "text": "The answer might have a poorer semantic meaning due to its potential generality. #### **C.",
+            "position": 100,
+            "score": 0.0789,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0101",
+            "text": "Contextual Relevancy** Contextual Relevancy evaluates how relevant the retrieved context is to the given query.",
+            "position": 101,
+            "score": 0.0719,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0102",
+            "text": "It measures the system’s ability to retrieve pertinent information from the knowledge base.",
+            "position": 102,
+            "score": 0.1825,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0103",
+            "text": "This metric can be using the following metric: <!-- Start of picture text --> N S<br>mCR = N 1    S   rij c→q  (3)<br>i =1  1 j =1 <br><!-- End of picture text --> where _rij_<sup>_c→q_</sup> scores how well the j-th retrieved context element addresses well to the i-th query. #### **III.",
+            "position": 103,
+            "score": 0.1347,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0104",
+            "text": "EVALUATION METRICS** Evaluation metrics are crucial for assessing the performance of Retrieval Augmented Generation (RAG) systems.",
+            "position": 104,
+            "score": 0.4042,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0105",
+            "text": "These metrics help quantify various aspects of the system’s effectiveness, including the relevance of retrieved information, the accuracy of generated answers, and the overall quality of the system’s output.",
+            "position": 105,
+            "score": 0.1871,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0106",
+            "text": "The following subsections describe key metrics used in the evaluation of the RAG systems. #### **A.",
+            "position": 106,
+            "score": 0.5057,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0107",
+            "text": "Answer Relevancy** Answer Relevancy measures how well the generated answer addresses the user’s query.",
+            "position": 107,
+            "score": 0.0438,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0108",
+            "text": "For a set of S statements, the Answer Relevancy score can be calculated as: <!-- Start of picture text --> N S<br>mAR = N 1    S   rij a→q  (1)<br>i =1  1 j =1 <br><!-- End of picture text --> where _rij_<sup>_a→q_</sup> scores how well the j-th answer statement addresses well to the i-th query. #### **B.",
+            "position": 108,
+            "score": 0.1012,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0109",
+            "text": "Faithfulness** Faithfulness measures how accurately the generated answer reflects the information provided in the retrieved context.",
+            "position": 109,
+            "score": 0.0659,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0110",
+            "text": "It ensures that the system isn’t hallucinating or providing information not present in the context.",
+            "position": 110,
+            "score": 0.211,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0111",
+            "text": "Faithfulness can be calculated using techniques like entailment scores or fact-checking algorithms: <!-- Start of picture text --> N S<br>mF = N 1    S   rij a→c  (2)<br>i =1  1 j =1 <br><!-- End of picture text --> where _rij_<sup>_a→c_</sup> scores how well the j-th answer statement addresses well to the i-th set of retrieved context. #### **D.",
+            "position": 111,
+            "score": 0.1345,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0112",
+            "text": "Contextual Precision** Contextual Precision is a metric that quantifies the relevance ordering of retrieved information chunks.",
+            "position": 112,
+            "score": 0.2325,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0113",
+            "text": "It is defined mathematically as follows: Let _R_ ( _n_ ) represent the cumulative sum of relevance scores for the first _n_ retrieved items: <!-- Start of picture text --> n<br>Ri ( n ) =   rik<br>k =1<br><!-- End of picture text --> The mean Contextual Precision ( _mCP_ ) is then calculated as: <!-- Start of picture text --> N Ci<br>1 Ri ( k )<br>mCP = N 1   i =1   Ri ( Ci ) k  =1 k · rik   (4)<br><!-- End of picture text --> where _Ci_ is the total number of retrieved items, and _rk_ is the relevance score of the _k_ -th item.",
+            "position": 113,
+            "score": 0.1336,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0114",
+            "text": "This metric encapsulates the trade-off between the quantity of relevant information chunks retrieved and the prioritization of relevant nodes in the initial positions of the ranking.",
+            "position": 114,
+            "score": 0.101,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0115",
+            "text": "A higher _mCP_ value indicates a more effective balance between comprehensive retrieval and accurate ranking of relevant information. #### **E.",
+            "position": 115,
+            "score": 0.1077,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0116",
+            "text": "Contextual Recall** Contextual Recall measures the relevancy of the retrieved context given the expected answer. <!-- Start of picture text --> N S<br>mCR = N 1    S   rij e→c  (5)<br>i =1  1 j =1 <br><!-- End of picture text --> where _rij_<sup>_e→c_</sup> scores how well the j-th expected answer statement addresses to at least one of the retrieved context node in the i-th answer.",
+            "position": 116,
+            "score": 0.1215,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0117",
+            "text": "Barcelona, November 2024 4",
+            "position": 117,
+            "score": -0.0563,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 4
+        },
+        {
+            "id": "s0118",
+            "text": "#### **IV.",
+            "position": 118,
+            "score": 0.0048,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0119",
+            "text": "EVALUATION AND RESULTS** To evaluate the system, three types of documentation were tested.",
+            "position": 119,
+            "score": 0.3485,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0120",
+            "text": "First, article papers where the text density is greater than the image content.",
+            "position": 120,
+            "score": 0.304,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0121",
+            "text": "Second, corporate slides where the image content is much greater than the text content.",
+            "position": 121,
+            "score": 0.2419,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0122",
+            "text": "Finally, a mix of these two content types and topics.",
+            "position": 122,
+            "score": 0.1913,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0123",
+            "text": "By doing so, the system can be evaluated using two opposing data sources.",
+            "position": 123,
+            "score": 0.1316,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0124",
+            "text": "To accomplish this, three knowledge bases were created.",
+            "position": 124,
+            "score": 0.1019,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0125",
+            "text": "One knowledge base contains 5 article papers extracted from arXiv, another includes over 10 corporate documentation files, and the third knowledge base consists of mixed files up to 10 files of different topics and content types.",
+            "position": 125,
+            "score": 0.305,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0126",
+            "text": "For each document, an LLM was used to generate a number of questions, expected answers, and ground truths equivalent to the number of pages in the document.",
+            "position": 126,
+            "score": 0.2262,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0127",
+            "text": "For this purpose, the Claude Haiku 3.5 model was used for quick inference and dataset creation.",
+            "position": 127,
+            "score": 0.1062,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0128",
+            "text": "For the retrieval process, the maximum number of nodes retrieved was limited to 5.",
+            "position": 128,
+            "score": 0.1385,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0129",
+            "text": "No filter was applied to the node type, so the resulting retrieval can include any kind of node.",
+            "position": 129,
+            "score": 0.0078,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0130",
+            "text": "The answers were generated using the Claude Sonnet 3.5 v2 model.",
+            "position": 130,
+            "score": 0.0685,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0131",
+            "text": "The metrics scores mentioned in the last section range from 0 to 1, where an LLM evaluates the metric according to its description, assigning a quantified score from the set 0, 0.2, 0.4, 0.6, 0.8, 1 based on specific guidelines.",
+            "position": 131,
+            "score": 0.036,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0132",
+            "text": "The chosen LLM for this evaluation was Llama 3.1 405B Instruct.",
+            "position": 132,
+            "score": 0.1119,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0133",
+            "text": "To ensure a more contrasting and potentially unbiased scoring, a different model was intentionally used for the evaluation process compared to the one used for answer generation. #### **A.",
+            "position": 133,
+            "score": 0.0921,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0134",
+            "text": "Evaluating parsing** During the preprocessing phase, we observed the remarkable capacity of the three strategies to work together in extracting content from files, with each strategy taking on more responsibility depending on the file type.",
+            "position": 134,
+            "score": 0.4201,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0135",
+            "text": "For scanned PDF files, the FAST strategy has no content to extract, but OCR and LLM strategies take responsibility for parsing the document.",
+            "position": 135,
+            "score": 0.3813,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0136",
+            "text": "In academic article-type files, which are mostly two-column documents, FAST and LLM strategies handle much of the task responsibility.",
+            "position": 136,
+            "score": 0.4149,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0137",
+            "text": "This is because OCR will extract text horizontally, independent of the two-column structure.",
+            "position": 137,
+            "score": 0.3276,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0138",
+            "text": "The assembling LLM then places the information as a single-column page, leveraging its processing power.",
+            "position": 138,
+            "score": 0.204,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0139",
+            "text": "For presentation-like objects, all three strategies work together.",
+            "position": 139,
+            "score": 0.1429,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0140",
+            "text": "FAST extracts the images, while LLM and OCR extract the text from both the images and each slide.",
+            "position": 140,
+            "score": 0.2747,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0141",
+            "text": "It’s worth noting that we have experienced better text extraction from images using the OCR strategy.",
+            "position": 141,
+            "score": 0.3556,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0142",
+            "text": "However, while the LLM strategy is sometimes unable to extract the exact words, it proves useful in determining the correct text order.",
+            "position": 142,
+            "score": 0.2366,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0143",
+            "text": "OCR, on the other hand, provides the exact text, even if the text organization is poor. #### **B.",
+            "position": 143,
+            "score": 0.3982,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0144",
+            "text": "Evaluating node type influence** During the study, over 80% of retrieved nodes were primarily Page and Header nodes.",
+            "position": 144,
+            "score": 0.1345,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0145",
+            "text": "This is a remarkable result, as the system found more relevance in summaries than in other low-hierarchy nodes.",
+            "position": 145,
+            "score": 0.1502,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0146",
+            "text": "As seen in Figure 3, the context relevancy is quite low in all test cases.",
+            "position": 146,
+            "score": 0.1789,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0147",
+            "text": "This result is influenced by both the number of retrieved nodes per query and the information within the nodes themselves.",
+            "position": 147,
+            "score": -0.0313,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0148",
+            "text": "This indicates that most of the information is not relevant, as pages and sections contain multiple pieces of unused information. #### **C.",
+            "position": 148,
+            "score": 0.1885,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0149",
+            "text": "Evaluating precision** Moreover, note that the Contextual precision is lower in the mixture of topics test case.",
+            "position": 149,
+            "score": 0.2009,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0150",
+            "text": "This indicates that the system finds the first relevant context further down in the last retrieved nodes.",
+            "position": 150,
+            "score": 0.0697,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0151",
+            "text": "This issue can be addressed by implementing a reranker, such as one of the rerank models from Cohere [ **?** ], or by using an LLM as a reranker.",
+            "position": 151,
+            "score": 0.035,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0152",
+            "text": "It’s worth noting that the context precision is remarkably high in the presentation (corporate documentation) test case.",
+            "position": 152,
+            "score": 0.2776,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0153",
+            "text": "This could be due to the similarity of topics within this type of documentation. #### **V.",
+            "position": 153,
+            "score": 0.2551,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0154",
+            "text": "CONCLUSIONS** - The system demonstrates an impressive capacity to extract content from both presentation-style documents and high text density documents, including those provided as scanned images.",
+            "position": 154,
+            "score": 0.4407,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0155",
+            "text": "The ability of the three strategies to work together is remarkably enhanced by the capacity of the Claude Sonnet 3.5 family to perform OCR on documents. - This new node extraction and hierarchy approach opens up a novel way to chunk documents, moving beyond standard chunking strategies that do not distinguish among data types and their hierarchy in the document.",
+            "position": 155,
+            "score": 0.3637,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0156",
+            "text": "This makes it easier to track the file structure. - The system excels at the Answer Relevancy and Faithfulness metrics, albeit at the cost of retrieving a larger amount of context.",
+            "position": 156,
+            "score": 0.3469,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0157",
+            "text": "However, there is still work to be done with changing files and external references inside files.",
+            "position": 157,
+            "score": 0.2828,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0158",
+            "text": "More concept linking must be implemented to overcome the relationships among entities and concepts.",
+            "position": 158,
+            "score": 0.1228,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0159",
+            "text": "Barcelona, November 2024 5",
+            "position": 159,
+            "score": -0.0602,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 5
+        },
+        {
+            "id": "s0160",
+            "text": "<!-- Start of picture text --> Arxiv Papers Corporate Documentation Mixture of Topics<br>100 97.84 93.53 98.17 100 96.67 93.11 89.19 97.62 100 95.95 91.67 97.34<br>80.76<br>80 80 80 73.68<br>70.19<br>60 60 60 58.00<br>52.38<br>Score (%) 40 Score (%) 40 Score (%) 40<br>20 20 20<br>AnswerRelevancyContextualPrecision ContextualReca ContextualRelevancy l Faithfulness AnswerRelevancyContextualPrecision ContextualReca ContextualRelevancy l Faithfulness AnswerRelevancyContextualPrecision ContextualReca ContextualRelevancy l Faithfulness<br><!-- End of picture text --> FIG.",
+            "position": 160,
+            "score": 0.2791,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 6
+        },
+        {
+            "id": "s0161",
+            "text": "Comparative Analysis of Knowledge Base Performance Across Different Metrics.",
+            "position": 161,
+            "score": 0.118,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 6
+        },
+        {
+            "id": "s0162",
+            "text": "The figure illustrates the percentage results of various metrics employed in the study.",
+            "position": 162,
+            "score": 0.0867,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 6
+        },
+        {
+            "id": "s0163",
+            "text": "From left to right, the graph presents data for three distinct knowledge bases: a collection of academic articles covering diverse topics, corporate documentation from Applus+ IDIADA, and a heterogeneous knowledge base comprising mixed topics and file structures, including both presentation-style and high text-density documents. - [1] Gemini 2.000.000 context window model, _https://blog.google/technology/developers/gemini-gemma-developer-updatesmay-2024/_ , (December 12th, 2024). - [2] Nelson F Liu, Kevin Lin, John Hewitt, Ashwin Paranjape, Michele Bevilacqua, Fabio Petroni, and Percy Liang. _Lost in the middle: How language models use long contexts._ arXiv preprint arXiv:2307.03172, 2023a. - [3] Anthropic prompt caching, _https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching_ (December 9th, 2024). - [4] Renyi Qu, Ruixuan Tu, Forrest Bao _Is Semantic Chunking Worth the Computational Cost?_ , arXiv:2410.13070 - [5] Anthropic models, _https://docs.anthropic.com/en/docs/about-claude/models_ , (November 4th, 2024). - [6] AWS Textract service, _https://aws.amazon.com/textract/_ , (December 12th, 2024). - [7] Llamaindex splitters, _https://docs.llamaindex.ai/en/stable/api_ _~~r~~ eference/node_ _~~p~~ arsers/_ (December 9th, 2024) - [8] Anthropic tokens equivalency, _https://docs.anthropic.com/en/docs/resources/glossary_ , (November 4th, 2024). - [9] Gemini models, _https://ai.google.dev/gemini-api/docs/models/gemini#token-size_ , (November 4th, 2024). - [10] Pinecone Metadata, _https://docs.pinecone.io/guides/data/understanding-metadata_ . (December 2th, 2024). - [11] VoyageAI, _https://docs.voyageai.com/docs/embeddings_ . (December 2th, 2024). - [12] Cohere embedding models, _https://docs.cohere.com/v2/docs/cohere-embed_ . (December 2th, 2024). - [13] Cohere reranking models, _https://docs.cohere.com/v2/docs/rerank-2_ . (December 2th, 2024). - [14] Anthropic contextual retrieval, _https://www.anthropic.com/news/contextual-retrieval_ (September 26th, 2024) - [15] Pinecone chunking strategies, _https://www.pinecone.io/learn/chunking-strategies/_ (July 17th, 2024) - [16] Diego Martn, Jordi Sanchez and Xavier Vizcano, ”Human Interaction Classifier for llm based chatbot.” arXiv, 2024, arXiv:2407.21647. - [17] Ori Ram, Yoav Levine, Itay Dalmedigos, Dor Muhlgay, Amnon Shashua, Kevin Leyton-Brown, and Yoav Shoham. _Incontext retrieval-augmented language models._ arXiv preprint arXiv:2302.00083, 2023. - [18] Ishneet Sukhvinder Singh*, Ritvik Aggarwal*, Ibrahim Allahverdiyev, Muhammad Taha, Aslihan Akalin, Kevin Zhu, Sean OBrien, _ChunkRAG: Novel LLM-Chunk Filtering Method for RAG Systems_ , arXiv:2410.19572 - [19] Zijie Zhong, Hanwen Liu, Xiaoya Cui, Xiaofan Zhang, Zengchang Qin, _Mix-of-Granularity: Optimize the Chunking Granularity for Retrieval-Augmented Generation_ , arxiv: arXiv:2406.00456 Barcelona, November 2024 6",
+            "position": 163,
+            "score": 0.2651,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 6
+        },
+        {
+            "id": "s0164",
+            "text": "#### **VI.",
+            "position": 164,
+            "score": 0.0675,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0165",
+            "text": "APPENDIX** This appendix presents a curated selection of markdown files generated during the pre-processing stage of the system.",
+            "position": 165,
+            "score": 0.4452,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0166",
+            "text": "These examples serve to illustrate the system’s capability in handling diverse document types and transforming them into structured markdown format.",
+            "position": 166,
+            "score": 0.5066,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0167",
+            "text": "Each example is accompanied by a brief analysis highlighting the specific challenges addressed and the key features of the markdown output. #### **A.",
+            "position": 167,
+            "score": 0.4138,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0168",
+            "text": "EURONCAP: https://www.euroncap.com/en/results/audi/q6+e-tron/52560 (page 1)** This extract from a Euro NCAP report demonstrates high image density.",
+            "position": 168,
+            "score": 0.2065,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0169",
+            "text": "Consequently, the markdown file predominantly consists of detailed image descriptions, effectively capturing the visual content. ### # TEST RESULTS ## ! [Image type: Graphic Description: The Audi logo, consisting of four interlocking rings arranged horizontally.",
+            "position": 169,
+            "score": 0.3286,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0170",
+            "text": "The rings ae o r y n t an Wanderer, which formed Auto Union in 1932.](51b47d04-0608-466c-acb7-6bfbbfd23001.png) ### **Audi Q6 e-tron** Standard Safety Equipment ![Image type: Graphic Dess r (r en Dn n sn we n t Cs tt rs around the circle.",
+            "position": 170,
+            "score": 0.097,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0171",
+            "text": "This organization is responsible for European vehicle safety ratings and consumer protection.](d0495b8e-2a9a-4fc6-9c03-ade34499fabf.png) ![Image type: Graphic s :o color.",
+            "position": 171,
+            "score": 0.1074,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0172",
+            "text": "The stars are arranged in a horizontal line and appear to be using a standard star icon design.",
+            "position": 172,
+            "score": 0.0178,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0173",
+            "text": "This indicates a maximum or perfect rating score.](24ccdbca-dd58-4f73-968b-9563ffdbff01.png) **2024** ### ! [Image type: Photo Description: An Audi Q6 e-tron luxury electric SUV is shown in a studio setting against a white background.",
+            "position": 173,
+            "score": 0.0629,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0174",
+            "text": "The vehicle is finished in a sleek dark gray metallic color.",
+            "position": 174,
+            "score": 0.1512,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0175",
+            "text": "The design features Audi's distinctive front grille design with closed-off sections typical of electric vehicles, sleek LED headlights, and aerodynamic body lines along the sides.",
+            "position": 175,
+            "score": 0.0384,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0176",
+            "text": "The vehicle sits on stylish alloy wheels and displays the \"Q6 e-tron\" badge, indicating its all-electric powertrain.](4b04032e-40f5-4093-8074-48281f62e6ea.png) ### ## Safety Ratings ## ! [Image type: Graphic Description: A yellow square icon showing a simplified representation of a passenger wearing a seatbelt.",
+            "position": 176,
+            "score": 0.0099,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0177",
+            "text": "The icon indicates vehicle safety features or warnings related to seatbelt usage, using 1 (----) s 91% ## ! [Image type: Graphic Description: A simple blue icon depicting a car seat with a small figure, representing a child safety seat or passenger seating position.",
+            "position": 177,
+            "score": 0.0022,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0178",
+            "text": "The icon uses a minimalist design style typical of automotive %a : ** (----)s n% ## ! [Image type: Graphic Description: A walking figure icon in white against a green background.",
+            "position": 178,
+            "score": 0.0612,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0179",
+            "text": "The icon shows a simplified s t n user interfaces to indicate pedestrian areas, walkways, or walking-related actions.](b7671b69-d451-490d-8a4c-dc9aad84d18c.png) **Vulnerable Road Users**: 81% Barcelona, November 2024 7",
+            "position": 179,
+            "score": -0.0066,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 7
+        },
+        {
+            "id": "s0180",
+            "text": "## ! [Image type: Graphic Description: A wireless car icon on a purple background.",
+            "position": 180,
+            "score": -0.0131,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 8
+        },
+        {
+            "id": "s0181",
+            "text": "The graphic shows a simple car silhouette with curved wifi or signal lines above it, suggesting connectivity or wireless capabilities.",
+            "position": 181,
+            "score": -0.0493,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 8
+        },
+        {
+            "id": "s0182",
+            "text": "This type of icon is commonly used to represent connected car services, car wifi, or automotive wireless technologies.](623460b1-8e34-4d55-a0e1-df969ef2373a.png) **Safety Assist**: 80% #### ## SPECIFICATION ! [Image type: Graphic Description: A horizontal black line or divider.",
+            "position": 182,
+            "score": -0.001,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 8
+        },
+        {
+            "id": "s0183",
+            "text": "The line appears to be made up of small dots or pixels, creating a dotted or perforated appearance against a white background.",
+            "position": 183,
+            "score": 0.0518,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 8
+        },
+        {
+            "id": "s0184",
+            "text": "This type of graphic element is commonly used as a separator or visual break in documents or interfaces.](0ca99a9d-551f-454a-bccc-b770b5bb6b25.png) I Field I Value I Tested Model | Audi Q6 e-tron quattro, LHD I I Body Type | - 5 door SUV I Year Of Publication | 2024 | Kerb Weight | 2400kg I VIN From Which Rating Applies | - all Q6 e-trons I Class | Large SUV I *Euro NCAP Audi Q6 e-tron Sept 2024 1/14* #### **B.",
+            "position": 184,
+            "score": 0.2269,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 8
+        },
+        {
+            "id": "s0185",
+            "text": "EURONCAP: https://www.euroncap.com/en/results/audi/q6+e-tron/52560 (page 9)** Another section from the aforementioned report primarily features tabular data.",
+            "position": 185,
+            "score": 0.2155,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 8
+        },
+        {
+            "id": "s0186",
+            "text": "Notably, the system not only successfully extracted the table contents but also utilized the provided color mapping to accurately replace the color with the word representation within the table structure. ### # TEST RESULTS ## ! [Image type: Graphic Description: This is the Euro NCAP (European New Car Assessment Programme) logo.",
+            "position": 186,
+            "score": 0.2847,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 8
+        },
+        {
+            "id": "s0187",
+            "text": "It features a circular yellow and black crash test symbol in the center, with the text \"EURO NCAP\" split on either side of the symbol.",
+            "position": 187,
+            "score": 0.1179,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 8
+        },
+        {
+            "id": "s0188",
+            "text": "The background is a dark blue color, and \"FOR SAFER CARS\" appears above the main logo.",
+            "position": 188,
+            "score": 0.0011,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 8
+        },
+        {
+            "id": "s0189",
+            "text": "This is the official safety assessment organization's emblem used to certify vehicle safety standards in Europe.](200cc4d1-8386-4d58-8811-6d7400fc1a73.png) #### # VULNERABLE ROAD USERS ! [Image type: Graphic Description: This is a simple pedestrian crossing symbol in white against a green background.",
+            "position": 189,
+            "score": 0.0558,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 8
+        },
+        {
+            "id": "s0190",
+            "text": "The icon shows a walking figure in a minimalist design, commonly used in traffic signs and public spaces to indicate pedestrian walkways or crossing areas.](13fa3481-5a87-404b-bf96-ace3a6a000ac.png) **Total 51.5 Pts / 81%** ! [Image type: Graphic Description: This appears to be a simple horizontal line or divider, composed of small dots or pixels a e visual separator or decorative element.](0d4513a7-ad44-417b-87ae-2ca69e0d9874.png) **GOOD ADEQUATE MARGINAL WEAK POOR** Barcelona, November 2024 8",
+            "position": 190,
+            "score": -0.013,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 8
+        },
+        {
+            "id": "s0191",
+            "text": "## VRU Impact Protection **27.9 / 36 Pts** ! [Image type: Diagram Description: This is a technical illustration showing the cross-sectional view of a vehicle's safetyfeatures.",
+            "position": 191,
+            "score": 0.0628,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 9
+        },
+        {
+            "id": "s0192",
+            "text": "The diagram is rendered in a simplified 3D style with a color-coded interior.",
+            "position": 192,
+            "score": 0.085,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 9
+        },
+        {
+            "id": "s0193",
+            "text": "The highlighting shows different zones of the vehicle's structure, with particular emphasis on what ap ' n or to demonstrate different structural elements or safety zones within the vehicle design.](93702d32-fd9e-4c22-aefb-3e2b1c8c8f4d.png) I Body Region I Points I I Pedestrian & Cyclist Head | 12.6 Pts I I Pelvis | 1.8 Pts I I Femur | 4.5 Pts | I Knee & Tibia | 9.0 Pts I ## VRU Impact Mitigation **23.6 / 27 Pts** I System Name | Active Front Assist I I Type I Auto-Brake with Forward Collision Warning I | Operational From | 5 km/h I ## PERFORMANCE | ### AEB Pedestrian **6.3 / 9 Pts** I Scenario I Day time I Night time Car reversing into adult or child | POOR | - I I Adult crossing a road into which a car is turning I GOOD | - I I Adult crossing the road I GOOD I GOOD I Child running from behind parked vehicles | ADEQUATE | MARGINAL I I Adult along the roadside I GOOD I GOOD I - Currently not tested ### AEB Cyclist **7.8 / 8 Pts** I Scenario I Day time I Approaching cyclist crossing from behind parked vehicles | GOOD I Turning across path of an oncoming cyclist | GOOD I I Approaching a crossing cyclist I GOOD I I Approaching a cyclist along the roadside | GOOD I Euro NCAP Audi Q6 e-tron Sept 2024 9/14 Barcelona, November 2024 9",
+            "position": 193,
+            "score": 0.2001,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 9
+        },
+        {
+            "id": "s0194",
+            "text": "#### **C. ”Embedding-aided network dismantling.”, arXiv:2208.01087v1. page 10** This academic paper exhibits high textual density.",
+            "position": 194,
+            "score": 0.1795,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0195",
+            "text": "The system demonstrates advanced capabilities by incorporating second-level headers and enumerated lists.",
+            "position": 195,
+            "score": 0.2101,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0196",
+            "text": "Furthermore, it rendered mathematical formulas in LaTeX format.",
+            "position": 196,
+            "score": 0.2383,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0197",
+            "text": "It’s worth noting that despite the original two-column layout, the system effectively reorganized the content to maintain logical flow and readability. # 10 ## ## Explosive Percolation (EP) For bond percolation, we rely on the EP algorithm proposed in Ref. [42], here briefly summarized.",
+            "position": 197,
+            "score": 0.1532,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0198",
+            "text": "At the beginning of the algorithm, all edges of the network are considered not active and each node is part of its own component.",
+            "position": 198,
+            "score": -0.0532,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0199",
+            "text": "Edges are activated one by one.",
+            "position": 199,
+            "score": -0.0106,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0200",
+            "text": "The activation of one edge may lead to the merger of two clusters.",
+            "position": 200,
+            "score": 0.0228,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0201",
+            "text": "At the t-th stage of the algorithm, the score of the edge (i, j) is ij = 1/(ci cj), where ci is the size of the cluster which node i belongs to.",
+            "position": 201,
+            "score": -0.0666,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0202",
+            "text": "A maximum of M = 1,000 edges are selectedat random among those still not active; the edge with maximum score (ties are randomly broken) is activated, and the score of all other edges is recomputed.",
+            "position": 202,
+            "score": 0.0445,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0203",
+            "text": "The algorithm is iterated until all edgesare active.",
+            "position": 203,
+            "score": -0.002,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0204",
+            "text": "Solutions to the dismantling problem are obtained by reversing the order of activation of the edges in the EP algorithm.",
+            "position": 204,
+            "score": 0.1199,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0205",
+            "text": "For site percolation, we rely on a very similar algorithm known in the literature as Explosive Immunization (EI) [21]. ## Embedding-aided dismantling algorithms e ' r s mapped to a point vi in the underlying space.",
+            "position": 205,
+            "score": 0.0108,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0206",
+            "text": "The embedding is used to perform iterative bisections of the network.",
+            "position": 206,
+            "score": 0.1179,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0207",
+            "text": "For bond percolation, we use the following procedure.",
+            "position": 207,
+            "score": -0.0001,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0208",
+            "text": "Indicate with Cz and Ez the total number of clusters and the inter-clusters edges identified at stage z of the algorithm, respectively.",
+            "position": 208,
+            "score": 0.0251,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0209",
+            "text": "Tz is the size of the structural set at stage z, i.e., ISTzl = Tz.",
+            "position": 209,
+            "score": 0.0493,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0210",
+            "text": "The structural set is initialized to SO = ST0 = .",
+            "position": 210,
+            "score": 0.0783,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0211",
+            "text": "Without loss of generality, we assume that at stage z = 1, the network is composed of one single cluster C1 = 1.",
+            "position": 211,
+            "score": -0.0661,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0212",
+            "text": "At each stage z of the algorithm, we follow these steps: 1.",
+            "position": 212,
+            "score": 0.1088,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0213",
+            "text": "We identify the largest cluster, say cz, among the Cz available.",
+            "position": 213,
+            "score": 0.0516,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0214",
+            "text": "We use the already available n n n thiscluster to find a bipartition.",
+            "position": 214,
+            "score": 0.1272,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0215",
+            "text": "The bipartition of the cluster is obtained considering only elements that do not belong to the set STz1.",
+            "position": 215,
+            "score": 0.0488,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0216",
+            "text": "The operation allows us to find two new clusters, thus Cz+1 = Cz +1 clusters.",
+            "position": 216,
+            "score": 0.0306,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0217",
+            "text": "We identify all Ez edges connecting the two parts of cluster cz determined at step 1.",
+            "position": 217,
+            "score": 0.0264,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0218",
+            "text": "These are edges that stand in-between the two clusters that will originate from cz but that are not yet part of the structural set, i.e., e Ez e STz1.",
+            "position": 218,
+            "score": 0.0478,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0219",
+            "text": "We add all edges within Ez to the structural set in random order.",
+            "position": 219,
+            "score": 0.0105,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0220",
+            "text": "The structural set at this point is STz with size Tz = z r=1 |Er|.",
+            "position": 220,
+            "score": 0.0327,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0221",
+            "text": "We increase z z + 1.",
+            "position": 221,
+            "score": -0.026,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0222",
+            "text": "The algorithm is iterated until all edges are part of the structural set.",
+            "position": 222,
+            "score": 0.0126,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0223",
+            "text": "In site percolation, the procedure is analogous.",
+            "position": 223,
+            "score": -0.0141,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0224",
+            "text": "The main difference is that the two clusters that are formed at each iteration should be disconnected by removing nodes rather than edges.",
+            "position": 224,
+            "score": 0.0695,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0225",
+            "text": "Please note thatfinding the minimum number of nodes to be removed in order to disconnect the two clusters is an NP-hard problem known in the literature as minimum vertex cover problem.",
+            "position": 225,
+            "score": -0.0587,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0226",
+            "text": "Here, we rely on the approximate algorithm developed by Ren et al. [17]. ### ## Laplacian embedding (LE) This embedding has been considered by Ren et al. in the context of the site percolation problem, and later generalized by some of the same authors to bond percolation [16, 17].",
+            "position": 226,
+            "score": -0.0121,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0227",
+            "text": "Barcelona, November 2024 10",
+            "position": 227,
+            "score": -0.0599,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 10
+        },
+        {
+            "id": "s0228",
+            "text": "Nodes are embedded in a one-dimensional space, where the position of node i is identified by the ith component of the eigenvector corresponding to the second smallest eigenvalue of the generalized Laplacian operator L = D B.",
+            "position": 228,
+            "score": -0.0549,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0229",
+            "text": "Here, the ijth component of the matrix B is defined as Bij = Aij(ci + cj 1); ci is the cost of removal of node i, i.e., F({i}) = ci; D is the diagonal matrix whose ith diagonal element is Dii = j Aij.",
+            "position": 229,
+            "score": -0.0197,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0230",
+            "text": "The bipartition of the network is obtained by separating nodes on th t t t t r t t tch stage of the dismantling algorithm.",
+            "position": 230,
+            "score": 0.0544,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0231",
+            "text": "For bond percolation, the same procedureas above is followed with the only caveat that the embedding of nodes is performed usingthe standard combinatorial Laplacian [16]. ### ## Hyperbolic embedding (HYP) a e rely on the so-called Mercator method [32].",
+            "position": 231,
+            "score": 0.0071,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0232",
+            "text": "Mercator embeds networks with arbitrary degree distributions via the maximization of the likelihood function ## $$L = \\prod_{1j<iN} p(x_{ij})^{A_{ij}} [1 - p(x_{ij})]^{1-A_{ij}}$$, where the product goes over all node pairs ij in the network, while p(xij) is the Fermi-Dirac connection probability given by $p(x_{ij}) = \\frac{1}{1+e^{(x_{ij}-R)/2T}}$.",
+            "position": 232,
+            "score": -0.0341,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0233",
+            "text": "Here, xij = ri + rj<sup>+</sup> 2ln(ij/2) is approximately the hyperbolic distance [43] between nodes i and j, ij = | li jll is the angular(similarity) distance, and R 2lnN is the radius of the hyperbolic disk where all nodes reside.",
+            "position": 233,
+            "score": 0.031,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0234",
+            "text": "The radial coordinate ri is related to the observed node degree ki, as ri R 2lnki and quantifies node popularity [44].",
+            "position": 234,
+            "score": -0.0368,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0235",
+            "text": "The value of the temperature parameter T for a given network is also inferred by Mercator.",
+            "position": 235,
+            "score": -0.0668,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0236",
+            "text": "The maximization of the likelihood function leverages the Laplacian Eigenmaps approach of Ref. [45].",
+            "position": 236,
+            "score": 0.0232,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0237",
+            "text": "Hyperbolic coordinates are estimated on the entire network topology.",
+            "position": 237,
+            "score": -0.0264,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0238",
+            "text": "At each stage of the dismantling algorithm, a bipartition is obtained by cutting in half the slice of the hyperbolic disk of the cluster under consideration. ## Node2vec embedding (N2V) Node2vec [33] is a network embedding algorithm that builds on the #### **D. ”Attention Is All You Need.”, arXiv:1706.03762. page 4** In this academic article containing both text and images, the system employed a sophisticated approach.",
+            "position": 238,
+            "score": 0.1105,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0239",
+            "text": "It created appropriate headers to encapsulate visual elements and provided comprehensive descriptions of the images.",
+            "position": 239,
+            "score": 0.242,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0240",
+            "text": "Moreover, the system accurately identified and labeled diagram-type images. # Scaled Dot-Product Attention and Multi-Head Attention ### ! [Image type: Diagram Description: This diagram shows the structure of a neural network attention mechanism, specificallyfocusing on the Query (Q), Key (K), and Value (V) computation flow.",
+            "position": 240,
+            "score": 0.0597,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0241",
+            "text": "The diagram flows from bottom totop, starting with Q and K inputs feeding into a MatMul operation.",
+            "position": 241,
+            "score": 0.016,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0242",
+            "text": "The output then goes through a Scale operation, followed by an optional Mask layer, then a SoftMax activation, and finally another MatMul operation with the V input.",
+            "position": 242,
+            "score": 0.025,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0243",
+            "text": "Each component is represented by a different colored box, with arrows indicating the flow of data between components.",
+            "position": 243,
+            "score": 0.0686,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0244",
+            "text": "The structure represents a typical attention mechanismused in transformer architectures.](8d18b916-632f-49e8-8808-bbb663b774cb.png) Barcelona, November 2024 11",
+            "position": 244,
+            "score": 0.0586,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 11
+        },
+        {
+            "id": "s0245",
+            "text": "### ! [Image type: Diagram e t a mne bottom,there are three inputs labeled V, K, and Q, each feeding into separate Linear layers.",
+            "position": 245,
+            "score": 0.0163,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0246",
+            "text": "These Linearlayers are shown stacked, suggesting multiple attention heads.",
+            "position": 246,
+            "score": 0.0351,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0247",
+            "text": "The outputs from these Linear Iay pe rectangles.",
+            "position": 247,
+            "score": 0.089,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0248",
+            "text": "Theseattention outputs are then concatenated (shown by the \"Concat\" layer), and finally processed through a final Linear layer at the top.",
+            "position": 248,
+            "score": 0.1329,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0249",
+            "text": "The diagram also shows an annotation \"h\" on the right side, typically indicating the number of attention heads.",
+            "position": 249,
+            "score": 0.0043,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0250",
+            "text": "The overall structure demonstrates the parallel processing nature of multi-head attention mechanisms commonly used in transformer models.](bbdeb311-5601-48a6-bfb8-4163bc9d75bc.png) Figure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several attention layers running in parallel. of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key. ## 3.2.1 Scaled Dot-Product Attention We call our particular attention \"Scaled Dot-Product Attention\" (Figure 2).",
+            "position": 250,
+            "score": 0.1605,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0251",
+            "text": "The input consists of queries and keys of dimension dk, and values of dimension dv.",
+            "position": 251,
+            "score": 0.0115,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0252",
+            "text": "We compute the dot products of the query with all keys, divide each by dk, and apply a softmax function to obtain the weights on the values.In practice, we compute the attention function on a set of queries simultaneously, packed together into a matrix Q.",
+            "position": 252,
+            "score": 0.0119,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0253",
+            "text": "The keys and values are also packed together into matrices K and V.",
+            "position": 253,
+            "score": 0.0693,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0254",
+            "text": "We compute the matrix ofoutputs as: $Attention(Q, K, V) = softmax(\\frac{QK^T}{\\sqrt{d_k}})V$ (1) The two most commonly used attention functions are additive attention [2], and dot-product (multiplicative) attention.",
+            "position": 254,
+            "score": 0.0648,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0255",
+            "text": "Dot-product attention is identical to our algorithm, except for the scaling factor of $\\frac{1}{\\sqrt{d_k}}$.",
+            "position": 255,
+            "score": 0.0364,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0256",
+            "text": "Additive attention computes the compatibility function using a feed-forward network with a single hidden layer.",
+            "position": 256,
+            "score": 0.0856,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0257",
+            "text": "While the two are similar in theoretical o c o oan be implemented using highly optimized matrix multiplication code.",
+            "position": 257,
+            "score": 0.185,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0258",
+            "text": "While for small values of dk the two mechanisms perform similarly, additive attention outperforms dot product attention without scaling for larger values of dk [3].",
+            "position": 258,
+            "score": 0.0912,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0259",
+            "text": "We suspect that for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients.",
+            "position": 259,
+            "score": 0.0679,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0260",
+            "text": "To counteract this effect, we scale the dot products by $\\frac{1}{\\sqrt{d_k}}$. ## 3.2.2 Multi-Head Attention Instead of performing a single attention function with dmodel-dimensional keys, values and queries, ww t nt.",
+            "position": 260,
+            "score": 0.0593,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0261",
+            "text": "Iea o d a ted versions of queries, keys and values we then perform the attention function in parallel, yielding dv-dimensional st t tt t t t t t t nt random variables with mean 0 and variance 1.",
+            "position": 261,
+            "score": 0.1259,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0262",
+            "text": "Then their dot product, $q \\cdot k = \\sum_{i=1}^{d_k} q_ik_i$, has mean 0 and variance dk.",
+            "position": 262,
+            "score": 0.007,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
+        },
+        {
+            "id": "s0263",
+            "text": "Barcelona, November 2024 12",
+            "position": 263,
+            "score": -0.0663,
+            "selected": false,
+            "is_neighbor": false,
+            "page": 12
         }
     ],
-    "selected_ids": [1, 2, 3, 4],
-    "tokens_original": 1000,
-    "tokens_selected": 300,
-    "budget": 350,
-    "budget_hit": false,
+    "selected_ids": [
+        "s0001",
+        "s0002",
+        "s0014",
+        "s0015",
+        "s0016",
+        "s0036",
+        "s0037",
+        "s0038",
+        "s0056",
+        "s0057",
+        "s0058"
+    ],
+    "tokens_original": 10037,
+    "tokens_selected": 399,
+    "budget": 400,
+    "budget_hit": true,
     "config": {
-        "top_k": 4,
-        "window": 0,
-        "budget": 350
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "tokenizer": "Qwen/Qwen2.5-3B-Instruct",
+        "top_k": 5,
+        "window": 1,
+        "budget": 400
     }
 }

@@ -1,72 +1,128 @@
-import ollama
+# -----------------------------------------
+# SOLVER CALL HELPER
+# -----------------------------------------
+
+def call_solver(
+    route,
+    question,
+    context,
+    document,
+    solver,
+    check_fits,
+    max_new_tokens
+):
+
+    # Check whether the input fits before calling Solver.
+
+    fit_result = check_fits(
+        document if route in ["full", "recite"] else context,
+        question,
+        max_new_tokens,
+        route
+    )
+
+    if fit_result is not True:
+        raise RuntimeError(
+            f"Input does not fit for the {route} route. "
+            "Check the actual check_fits implementation."
+        )
+
+    # Call Solver using the four-argument contract.
+
+    solver_result = solver(
+        route,
+        question,
+        context,
+        document
+    )
+
+    if not isinstance(solver_result, dict):
+        raise TypeError("Solver must return a dictionary.")
+
+    status = solver_result.get("status")
+
+    if status != "ok":
+        raise RuntimeError(
+            f"Solver failed. Status: {status}. "
+            f"Details: {solver_result.get('error', 'No additional details')}"
+        )
+
+    return solver_result
 
 
 # -----------------------------------------
 # ROUTE 1: DIRECT
 # -----------------------------------------
 
-def direct_route(question, selected_evidence, solver):
+def direct_route(
+    question,
+    selected_evidence,
+    solver,
+    check_fits,
+    full_document,
+    max_new_tokens
+):
 
     evidence_text = "\n".join(
         sentence.text for sentence in selected_evidence
     )
 
-    answer = solver(question, evidence_text)
+    solver_result = call_solver(
+        "direct",
+        question,
+        evidence_text,
+        full_document,
+        solver,
+        check_fits,
+        max_new_tokens
+    )
 
     return {
         "route": "direct",
-        "answer": answer,
+        "answer": solver_result["answer"],
+        "route_used": solver_result.get("route_used"),
+        "total_input_tokens": solver_result.get("total_input_tokens"),
+        "total_output_tokens": solver_result.get("total_output_tokens"),
+        "total_time_s": solver_result.get("total_time_s"),
         "widen_attempts": 0
     }
 
 
 # -----------------------------------------
-# ROUTE 2: RECITE-THEN-SOLVE
+# ROUTE 2: RECITE
 # -----------------------------------------
 
-def recite_route(question, selected_evidence, solver):
+def recite_route(
+    question,
+    selected_evidence,
+    solver,
+    check_fits,
+    full_document,
+    max_new_tokens
+):
 
     evidence_text = "\n".join(
         sentence.text for sentence in selected_evidence
     )
 
-    prompt = f"""
-You are an evidence organizer.
-
-Your task is to organize the provided evidence
-into clear and understandable statements.
-
-QUESTION:
-{question}
-
-SELECTED EVIDENCE:
-{evidence_text}
-
-Instructions:
-1. Preserve the original facts.
-2. Organize related information.
-3. Do not introduce new information.
-4. Do not answer the question.
-5. Return only the organized evidence.
-"""
-
-    response = ollama.chat(
-        model="tinyllama:latest",
-        messages=[
-            {"role": "user", "content": prompt}
-        ],
-        options={"temperature": 0}
+    solver_result = call_solver(
+        "recite",
+        question,
+        evidence_text,
+        full_document,
+        solver,
+        check_fits,
+        max_new_tokens
     )
-
-    recited_evidence = response.message.content
-
-    # Send organized evidence to Solver
-    answer = solver(question, recited_evidence)
 
     return {
         "route": "recite",
-        "recited_evidence": recited_evidence,
-        "answer": answer,
+        "answer": solver_result["answer"],
+        "route_used": solver_result.get("route_used"),
+        "total_input_tokens": solver_result.get("total_input_tokens"),
+        "total_output_tokens": solver_result.get("total_output_tokens"),
+        "total_time_s": solver_result.get("total_time_s"),
+        "fallback": solver_result.get("fallback"),
         "widen_attempts": 0
     }
 
@@ -75,69 +131,32 @@ Instructions:
 # ROUTE 3: FULL DOCUMENT
 # -----------------------------------------
 
-def split_into_chunks(text, max_words=2500, overlap=150):
+def full_document_route(
+    question,
+    full_document,
+    solver,
+    check_fits,
+    max_new_tokens
+):
 
-    words = text.split()
-
-    chunks = []
-
-    start = 0
-
-    while start < len(words):
-
-        end = min(start + max_words, len(words))
-
-        chunk = " ".join(words[start:end])
-
-        chunks.append(chunk)
-
-        if end == len(words):
-            break
-
-        start = end - overlap
-
-    return chunks
-
-
-def full_document_route(question, full_document, solver):
-
-    max_words = 2500
-
-    document_words = full_document.split()
-
-    # If document fits within the configured limit
-    if len(document_words) <= max_words:
-
-        answer = solver(question, full_document)
-
-    else:
-
-        # Divide document into smaller chunks
-        chunks = split_into_chunks(
-            full_document,
-            max_words=max_words,
-            overlap=150
-        )
-
-        partial_answers = []
-
-        # Process each chunk
-        for index, chunk in enumerate(chunks):
-
-            print(f"Processing document chunk {index + 1}/{len(chunks)}")
-
-            partial_answer = solver(question, chunk)
-
-            partial_answers.append(partial_answer)
-
-        # Combine partial answers
-        combined_context = "\n".join(partial_answers)
-
-        answer = solver(question, combined_context)
+    solver_result = call_solver(
+        "full",
+        question,
+        full_document,
+        full_document,
+        solver,
+        check_fits,
+        max_new_tokens
+    )
 
     return {
         "route": "full",
-        "answer": answer,
+        "answer": solver_result["answer"],
+        "route_used": solver_result.get("route_used"),
+        "total_input_tokens": solver_result.get("total_input_tokens"),
+        "total_output_tokens": solver_result.get("total_output_tokens"),
+        "total_time_s": solver_result.get("total_time_s"),
+        "fallback": solver_result.get("fallback"),
         "widen_attempts": 0
     }
 
@@ -151,50 +170,63 @@ def handle_expansion(
     highlighter_widen,
     evaluate_gate,
     solver,
-    full_document
+    check_fits,
+    full_document,
+    max_new_tokens
 ):
 
-    # Ask Highlighter for additional evidence ONCE
+    # Ask Highlighter for additional evidence once.
+
     expanded_data = highlighter_widen(original_data)
 
-    # Recheck Confidence Gate
+    # Re-evaluate Confidence Gate.
+
     new_confidence_result = evaluate_gate(expanded_data)
 
     new_confidence = new_confidence_result["confidence"]
 
     selected_evidence = expanded_data.selected_evidence
-
     question = expanded_data.question
 
     print("\nConfidence after expansion:", new_confidence)
 
-    # If HIGH, use direct route
     if new_confidence == "high":
 
         result = direct_route(
             question,
             selected_evidence,
-            solver
+            solver,
+            check_fits,
+            full_document,
+            max_new_tokens
         )
 
-    # If MEDIUM or LOW, use Recite-Then-Solve
     elif new_confidence in ["medium", "low"]:
 
         result = recite_route(
             question,
             selected_evidence,
-            solver
+            solver,
+            check_fits,
+            full_document,
+            max_new_tokens
         )
 
-    # If VERY LOW, use full document
     elif new_confidence == "very_low":
 
         result = full_document_route(
-            question, full_document, solver
+            question,
+            full_document,
+            solver,
+            check_fits,
+            max_new_tokens
         )
 
     else:
-        raise ValueError("Invalid confidence level.")
+
+        raise ValueError(
+            f"Invalid confidence level: {new_confidence}"
+        )
 
     result["widen_attempts"] = 1
     result["final_confidence"] = new_confidence
@@ -212,6 +244,8 @@ def route_request(
     selected_evidence,
     full_document,
     solver,
+    check_fits,
+    max_new_tokens,
     original_data=None,
     highlighter_widen=None,
     evaluate_gate=None
@@ -219,8 +253,6 @@ def route_request(
 
     confidence = confidence_result["confidence"]
 
-
-    # HIGH
     if confidence == "high":
 
         print("Route: DIRECT")
@@ -228,10 +260,12 @@ def route_request(
         return direct_route(
             question,
             selected_evidence,
-            solver
+            solver,
+            check_fits,
+            full_document,
+            max_new_tokens
         )
 
-    # MEDIUM
     elif confidence == "medium":
 
         print("Route: EXPAND")
@@ -241,6 +275,7 @@ def route_request(
             or evaluate_gate is None
             or original_data is None
         ):
+
             raise ValueError(
                 "Original data, Highlighter widening "
                 "and Gate evaluation functions are required."
@@ -251,10 +286,11 @@ def route_request(
             highlighter_widen,
             evaluate_gate,
             solver,
-            full_document
+            check_fits,
+            full_document,
+            max_new_tokens
         )
 
-    # LOW
     elif confidence == "low":
 
         print("Route: RECITE")
@@ -262,10 +298,12 @@ def route_request(
         return recite_route(
             question,
             selected_evidence,
-            solver
+            solver,
+            check_fits,
+            full_document,
+            max_new_tokens
         )
 
-    # VERY LOW
     elif confidence == "very_low":
 
         print("Route: FULL")
@@ -273,7 +311,9 @@ def route_request(
         return full_document_route(
             question,
             full_document,
-            solver
+            solver,
+            check_fits,
+            max_new_tokens
         )
 
     else:

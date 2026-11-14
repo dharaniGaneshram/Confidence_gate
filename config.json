@@ -14,7 +14,14 @@
         "document_file": "test_data/full_document.txt",
         "output_folder": "outputs"
     },
+    
     "models": {
-    "self_check_model": "tinyllama:latest"
-}
+        "self_check_model": "tinyllama:latest"
+    },
+    "solver": {
+        "max_new_tokens": 512
+   },
+    "router": {
+        "default_dataset_name": "test_run"
+   }
 }
