@@ -1,0 +1,28 @@
+{
+    "confidence_gate": {
+        "confidence": "medium",
+        "signals": {
+            "coverage": 1.0,
+            "margin": 0.010000000000000009,
+            "margin_reliable": true,
+            "self_check": "sufficient"
+        },
+        "score_margin": {
+            "value": 0.010000000000000009,
+            "reliable": true,
+            "budget_hit": false,
+            "reason": "Margin calculated successfully."
+        },
+        "reasons": [
+            "Evidence is reasonably relevant but confidence is not high."
+        ]
+    },
+    "router": {
+        "route": "recite",
+        "answer": "Dummy answer generated for testing.",
+        "widen_attempts": 1,
+        "final_confidence": "medium",
+        "context": "",
+        "notes": ""
+    }
+}

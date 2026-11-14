@@ -154,11 +154,13 @@ def main():
     )
 
     # Generate a unique log filename for every execution
-    input_filename = Path(input_path).stem
+    # Change this label whenever you test a different dataset
+    # Generate a unique log filename for every execution
+    dataset_name = input_data.get("dataset_name", "test_run")
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
 
-    log_filename = f"run_{input_filename}_{timestamp}"
+    log_filename = f"{dataset_name}_{timestamp}"
 
     generate_output(
         confidence_result,
@@ -175,13 +177,7 @@ def main():
 
     # Generate final JSON output
 
-    final_output = generate_output(
-        confidence_result=confidence_result,
-        router_result=router_result,
-        margin_result=margin_result,
-        output_folder=config["paths"]["output_folder"],
-        question_id="question_001"
-    )
+    
 
     if "final_confidence" in router_result:
         print("Final Confidence:", router_result["final_confidence"])

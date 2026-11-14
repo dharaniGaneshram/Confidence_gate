@@ -1,0 +1,28 @@
+{
+    "confidence_gate": {
+        "confidence": "high",
+        "signals": {
+            "coverage": 1.0,
+            "margin": 0.43,
+            "margin_reliable": true,
+            "self_check": "sufficient"
+        },
+        "score_margin": {
+            "value": 0.43,
+            "reliable": true,
+            "budget_hit": false,
+            "reason": "Margin calculated successfully."
+        },
+        "reasons": [
+            "Good coverage, sufficient evidence and clear score margin."
+        ]
+    },
+    "router": {
+        "route": "direct",
+        "answer": "Dummy answer generated for testing.",
+        "widen_attempts": 0,
+        "final_confidence": "high",
+        "context": "",
+        "notes": ""
+    }
+}
